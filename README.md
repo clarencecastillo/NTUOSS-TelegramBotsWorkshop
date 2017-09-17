@@ -63,6 +63,7 @@ For this tutorial, we'll be creating a *Cat Bot* which allows users to
 Since we need unique names for our Cat Bots, you can name your bot after your very own cat (or the cat you've never had). That way, BotFather won't likely complain about reserved usernames. If you don't have a cat, I've compiled a *Cat Name Matrix* aka "What's Your Cat Name" that could help you name your cat bot:
 
 **Step 1:** Sum of the digits in your Matriculation Number mod 10
+
 | Number | Name | Number | Name |
 | --- | --- | --- | --- |
 | 0 | `Mister` | 5 | `Moon` |
@@ -72,6 +73,7 @@ Since we need unique names for our Cat Bots, you can name your bot after your ve
 | 4 | `Princess` | 9 | `Professor` |
 
 <br>**Step 2:** First initial of your given name
+
 | Letter | Name | Letter | Name |
 | --- | --- | --- | --- |
 | a | `Fluffy` | n | `Cuddles` |
@@ -89,6 +91,7 @@ Since we need unique names for our Cat Bots, you can name your bot after your ve
 | m | `Midnight` | z | `Snowy` |
 
 <br>**Step 3:** Your GPA times your day of birth mod 10
+
 | Digit | Name | Digit | Name |
 | --- | --- | --- | --- |
 | 0  | `Bellyrubs` | 5 | `Waggles` |
