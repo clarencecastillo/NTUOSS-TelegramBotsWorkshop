@@ -7,22 +7,23 @@
 
 import random
 
+MAX_HUNGER = 100
+MIN_HUNGER = -100
+FEED_AMOUNT = 50
+
+MAX_DIRT = 100
+MIN_DIRT = -100
+CLEAN_AMOUNT = 50
+
+CYCLES_PER_DAY = 4
+
 class Cat(object):
 
-    MAX_HUNGER = 100
-    MIN_HUNGER = -100
-    FEED_AMOUNT = 50
-
-    MAX_DIRT = 100
-    MIN_DIRT = -100
-    CLEAN_AMOUNT = 50
-
-    def __init__(self, name, cycles_per_day):
+    def __init__(self, name):
         self.name = name
         self.hunger = 0
         self.dirt = 0
         self.cycles_passed = 0
-        self.cycles_per_day = 4
         self.is_alive = True
 
     def feed(self):
@@ -35,7 +36,7 @@ class Cat(object):
                 self.is_alive = False
                 response = self.name + " died of overeating. RIP (Rest In Pizza)."
             elif (self.hunger < 0):
-                response = "Although " + self.name + " was't really that hungry, the cat ate the food anyway. Be careful not to feed cats too much."
+                response = "Although " + self.name + " was't really that hungry, the cat ate the food anyway. Be careful not to feed the cat too much."
             else:
                 response = "You fed " + self.name + ". Cat is appeased and is forever greatful."
         return response
@@ -56,7 +57,7 @@ class Cat(object):
     def get_status(self):
         response = self.name + " is "
         if (self.is_alive):
-            response = "doing well. The cat is " + str(self.cycles_passed/self.cycles_per_day) + " days old."
+            response += "doing well. The cat is " + str(self.cycles_passed/CYCLES_PER_DAY) + " days old."
             if (self.hunger > MAX_HUNGER / 2):
                 response += " It is a little hungry. Perhaps it's about time to feed it."
             if (self.dirt > MAX_DIRT / 2):
@@ -67,10 +68,10 @@ class Cat(object):
 
     def on_update(self):
         if (self.is_alive):
-            self.dirt += MAX_DIRT / self.cycles_per_day
+            self.dirt += MAX_DIRT / CYCLES_PER_DAY
             if (self.dirt > MAX_DIRT):
                 self.dirt = MAX_DIRT
-            self.hunger += MAX_HUNGER / self.cycles_per_day
+            self.hunger += MAX_HUNGER / CYCLES_PER_DAY
             if (self.hunger >= MAX_HUNGER):
                 self.is_alive = False
             self.cycles_passed += 1
