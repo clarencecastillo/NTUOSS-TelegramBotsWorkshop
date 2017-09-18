@@ -120,31 +120,34 @@ The token should look something like this:
 
 ![task 1.3 screenshot a](screenshots/task_1_3_a.png?raw=true)
 
-Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our Cat Bot. To start off, open `catbot/catbot.py` on your text editor and paste the following after the line where it says *WRITE YOUR CODES BELOW THIS LINE*:
+Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our Cat Bot. To start off, open `catbot/catbot.py` on your text editor and paste following on the line indicated within `def on_chat_message(msg)`:
 
 ```python
-TOKEN = '' # <-- your token goes here
+# TODO: Create Hello World
 
-def on_chat_message(msg):
+# default response (feel free to change it)
+response = 'Meow!'
 
-    content_type, chat_type, chat_id = telepot.glance(msg)
+# handle only messages with text content
+if content_type == 'text':
 
-    # default response (feel free to change it)
-    response = 'Meow!'
+    # get message payload
+    msg_text = msg['text']
+    msg_sender = msg['from']['username']
+    print('Received: "' + msg_text + '" from ' + msg_sender)
 
-    # handle only messages with text content
-    if content_type == 'text':
+    # TODO: Implement Command Handling
+    response += ' Hi ' + msg_sender + '. Hello world! '
 
-        # get message payload
-        msg_text = msg['text']
-        msg_sender = msg['from']['username']
-        print('Received: "' + msg_text + '" from ' + msg_sender)
+# send the response
+bot.sendMessage(chat_id, response)
+```
 
-        # prepare response
-        response += ' Hi ' + msg_sender + '. Hello world! '
+Don't forget to add in our bot's API token:
+```python
+# TODO: Replace Token
 
-    # send the response
-    bot.sendMessage(chat_id, response)
+TOKEN = '2351749591:VskzWEJdWj_rlCx23Hyu5mIJdWjTVskzdEx'
 ```
 
 Let's bring our bot to life by running it. If you didn't get any errors this far, you should be able to test your bot by talking to it via Telegram Desktop. Enter your bot's username in the contacts search field and press `start` to begin the conversation. Remember that bots cannot initiate conversations with users so you have to send it a message first.
@@ -169,18 +172,137 @@ For this section, we'll program our cat bot such that it would be able to recogn
 
 | Command | Description |
 | --- | --- |
-| `/ask` | Returns a random fact about cats. |
-| `/status` | Returns the status of the cat together with a random picture of it. |
-| `/feed` | Returns the response of the cat after feeding it. |
-| `/bathe` | Returns the response of the cat after bathing it. |
-| `/kitty` | Murders your current cat and spawns you a new kitten. |
+| `/ask` | This command returns a random fact about cats. |
+| `/status` | This command returns the status of the cat together with a random picture of it. |
+| `/feed` | This command returns the response of the cat after feeding it. |
+| `/clean` | This command returns the response of the cat after bathing it. |
+| `/kitty` | This command murders your current cat if it's still alive and spawns you a new kitten. |
 
-#### 2.3 Data Storage
+For this tutorial, we will be using a *very sophisticated* cat simulator class which has already been coded for us. You're free to explore the codes inside `catbot/cat.py` for personal learning, but it would be beyond the scope of this workshop. For now, use the information below as reference of the commands made available to us to use when interfacing with an instance of the Cat class.
 
+-   Attributes:
+    -   `name (str)`: Name of cat
+    -   `hunger (int)`: Tracks how hungry the cat is (-100 to 100)
+    -   `dirt (int)`: Tracks how dirty the cat is (-100 to 100)
+    -   `cycles_passed (int)`: Tracks how many cycles (updates) the cat has been through
+    -   `is_alive (bool)`: Indicates whether the cat is still alive
+
+-   Methods:
+    -   `get_status()`: Returns the cat's age, needs and whether if it's still alive
+    -   `feed()`: Feeds the cat (hunger - 25); returns the cat's response after feeding
+    -   `clean()`: Cleans the cat (dirt - 25); returns the cat's response after cleaning
+    -   `chat()`: Returns a hyper realistic cat response
+
+The idea is to take care of a simulated cat using our bot. The cat's behavior and states have already been taken care of by `cat.py`, so the only thing left for us to do is to link the class' methods to our `on_chat_message` function. Our user would then be able to *take care* of the cat via the commands provided.
+
+![task 2.1 screenshot a](screenshots/task_2_1_a.png?raw=true)
+
+Let's update our code by adding logic which would route the program flow according to the user's command.
+
+```python
+# TODO: Implement Command Handling
+
+if (msg_text.startswith('/')):
+
+    # parse the command excluding the '/' and other arguments
+    command = msg_text[1:].lower().split()[0]
+
+    # prepare the correct response given the command
+    if (command == 'ask'):
+        response = 'Meow? *licks paws*'
+    elif (command == 'status'):
+        response = cat_bot.get_status()
+    elif (command == 'feed'):
+        response = cat_bot.feed()
+    elif (command == 'clean'):
+        response = cat_bot.clean()
+    elif (command == 'kitty'):
+
+        # TODO: Confirm User Action Using Keyboard
+
+        # kill cat if still alive
+        if (cat_bot.is_alive):
+            bot.sendMessage(chat_id, 'Meow! *scratches your face*')
+            bot.sendMessage(chat_id, cat_bot.name + ' was killed.')
+
+        # respawn cat
+        cat_bot = Cat(bot_name)
+        bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
+
+    # suggest the user to respawn the cat using /kitty
+    if not (cat_bot.is_alive):
+        response += ' You can respawn your cat using the command /kitty.'
+else:
+
+    # talk to the cat if no command was matched
+    response = cat_bot.chat()
+```
+
+With reference to how we handle `/kitty`, notice that we can actually send multiple messages to the user within the context of a single message event. Since telepot's default implementation is *synchronous*, the user will still receive the messages in the very same order we're sending them.
+
+![task 2.1 screenshot b](screenshots/task_2_1_b.png?raw=true)
 
 #### 2.2 Keyboards
 
-Besides receiving, parsing and sending message back and forth, Telegram Bots allow richer interactions with the user using keyboards.
+Besides receiving, parsing and sending message back and forth, Telegram Bots allow richer interactions with the user using keyboards. To prevent our user from *accidentally* `/kitty`-ing our live cat, we can prompt the user again to confirm this action. To do this, let's add an **Inline Keyboard** which we could use to prompt the user to confirm his/her action.
+
+With reference to the clause where `# TODO: Confirm User Action Using Keyboard` is at, replace everything under that with with the following:
+
+```python
+
+# TODO: Confirm User Action Using Keyboard
+
+if (cat_bot.is_alive):
+
+    # prepare confirm keyboard
+    confirm_keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text='Confirm', callback_data='kitty-confirm')],
+        [InlineKeyboardButton(text='Cancel', callback_data='kitty-cancel')],
+    ])
+
+    # send response with keyboard
+    response += ' Warning: ' + cat_bot.name + ' is still alive. Issuing this command will kill the cat (brutally) and reset all progress. Please confirm your action.'
+    bot.sendMessage(chat_id, response, reply_markup = confirm_keyboard)
+    return # prematurely terminate function call to await user response
+
+else:
+
+    # respawn cat
+    cat_bot = Cat(bot_name)
+    bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
+```
+
+While you're at it, don't forget to import `InlineKeyboardMarkup` and `InlineKeyboardButton` from `telepot.namedtuple` at the beginning of our code:
+
+```python
+# TODO: Import Keyboards
+
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+```
+
+To handle the inline keyboard *on press* event, let's add some logic to our `on_callback_query` which would be called whenever the user presses any buttons on our custom keyboard. Paste the following right where `# TODO: Handle Callback Query` is at:
+
+```python
+# TODO: Handle Callback Query
+
+# close inline keyboard
+inline_message_id = msg['message']['chat']['id'], msg['message']['message_id']
+bot.editMessageReplyMarkup(inline_message_id, reply_markup=None)
+
+# kill cat on confirm
+if (query_data == 'kitty-confirm'):
+    cat_bot = Cat(bot_name)
+    bot.sendMessage(from_id, 'Meow!!!')
+    bot.sendMessage(from_id, '*scratches your face*')
+    bot.sendMessage(from_id, cat_bot.name + ' was killed.')
+
+    #respawn cat
+    cat_bot = Cat(bot_name)
+    bot.sendMessage(from_id, '*respawns ' + cat_bot.name + '*')
+else:
+    bot.sendMessage(from_id, text='Meowww~~~')
+    bot.sendMessage(from_id, text='*licks your face*')
+```
 
 ## Task 3 - Dynamic Content
 
