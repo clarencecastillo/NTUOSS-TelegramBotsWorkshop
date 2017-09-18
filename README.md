@@ -249,7 +249,6 @@ Besides receiving, parsing and sending message back and forth, Telegram Bots all
 Find your way to `# TODO: Confirm User Action Using Keyboard` and then replace everything under that with with the following:
 
 ```python
-
 # TODO: Confirm User Action Using Keyboard
 
 if (cat_bot.is_alive):

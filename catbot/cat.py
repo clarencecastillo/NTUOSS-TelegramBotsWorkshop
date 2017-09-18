@@ -61,9 +61,9 @@ class Cat(object):
             if (self.hunger > MAX_HUNGER / 2):
                 response += " It is a little hungry. Perhaps it's about time to feed it."
             if (self.dirt > MAX_DIRT / 2):
-                response += " Is a little dirty. Maybe it's time to give it a bath."
+                response += " It is a little dirty. Maybe it's time to give it a bath."
         else:
-            response = "dead. There's nothing more that we can do about it."
+            response += "dead. There's nothing more that we can do about it."
         return response
 
     def on_update(self):
