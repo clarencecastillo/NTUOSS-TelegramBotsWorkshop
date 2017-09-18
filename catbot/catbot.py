@@ -39,7 +39,14 @@ MessageLoop(bot, {'chat': on_chat_message,
                   'callback_query': on_callback_query}).run_as_thread()
 print('Meow! ' + bot_name + ' at your service...')
 
-# keep the program running
-while True: time.sleep(10)
+# keep the program running and simulate cat life
+cat_last_update = time.time()
+while True:
+    time.sleep(10)
 
+    # update cat every 6 hours
+    if (time.time() - cat_last_update > 24/4*60*60):
+        cat_bot.on_update()
+        cat_last_update = time.time()
+        
 # ------------------------ WRITE YOUR CODES ABOVE THIS LINE ------------------------ #

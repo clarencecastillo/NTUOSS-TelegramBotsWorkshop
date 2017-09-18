@@ -238,7 +238,7 @@ else:
     response = cat_bot.chat()
 ```
 
-With reference to how we handle `/kitty`, notice that we can actually send multiple messages to the user within the context of a single message event. Since telepot's default implementation is *synchronous*, the user will still receive the messages in the very same order we're sending them.
+Notice that we can actually send multiple messages to the user within the context of a single message event (see where we handle `/kitty`). Since telepot's default implementation is *synchronous*, the user will still receive the messages in the very same order we're sending them.
 
 ![task 2.1 screenshot b](screenshots/task_2_1_b.png?raw=true)
 
@@ -246,7 +246,7 @@ With reference to how we handle `/kitty`, notice that we can actually send multi
 
 Besides receiving, parsing and sending message back and forth, Telegram Bots allow richer interactions with the user using keyboards. To prevent our user from *accidentally* `/kitty`-ing our live cat, we can prompt the user again to confirm this action. To do this, let's add an **Inline Keyboard** which we could use to prompt the user to confirm his/her action.
 
-With reference to the clause where `# TODO: Confirm User Action Using Keyboard` is at, replace everything under that with with the following:
+Find your way to `# TODO: Confirm User Action Using Keyboard` and then replace everything under that with with the following:
 
 ```python
 
