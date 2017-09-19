@@ -6,13 +6,22 @@
 # ------------------------ WRITE YOUR CODES BELOW THIS LINE ------------------------ #
 
 # import required modules
-import time, json, requests, telepot
+import time, telepot
 from telepot.loop import MessageLoop
 from cat import Cat
+
 # TODO: Import Keyboards
+
+# TODO: Import Requests
+
+# TODO: Import Random and BeautifulSoup
 
 # TODO: Replace Token
 TOKEN = ''
+
+# TODO: Get Random Cat Fact
+
+# TODO: Get Random Cat Image URL
 
 def on_chat_message(msg):
     global cat_bot
