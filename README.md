@@ -405,13 +405,13 @@ Notice that for this example, we're also using `requests` to fetch the HTML sour
 
 ![task 3.2 screenshot b](screenshots/task_3_2_b.png?raw=true)
 
-## Task 4 - Deployment
+## Task 5 - Deployment
 
 The final step is to free our cat bot into the wild, that is, to get it deployed on a server. Of course there's always the option to keep your laptop or device running, but why do that when you can get it up and running on a remote server *for free*?
 
 To do this, login to your Heroku dashboard ([sign up here](https://signup.heroku.com) if you still don't have one) and create a new app like this:
 
-![task 4 screenshot a](screenshots/task_4_a.png?raw=true)
+![task 5 screenshot a](screenshots/task_5_a.png?raw=true)
 
 There's no specific naming convention for catbot deployment applications, but for this instance, let's name our app after our cat like this: `captain-rainbow-bellyrubs-bot` (use your cat's own name you dummy). Note that by default, free accounts only get access to US and Europe servers but it shouldn't be a problem for us whichever region we choose.
 
@@ -421,15 +421,15 @@ As you can see, there are other options for us to choose, but to make thing simp
 
 If things go as planned, you should see something like the screenshot below after linking your Dropbox account.
 
-![task 4 screenshot b](screenshots/task_4_b.png?raw=true)
+![task 5 screenshot b](screenshots/task_5_b.png?raw=true)
 
 Next, we need to copy all of our files into the directory specified in the previous step: `Dropbox/Apps/Heroku/captain-rainbow-bellyrubs-bot`. This one shouldn't be that tough since you've already installed and connected your Dropbox account to your laptop. Just hit the *Deploy* button once all your files are uploaded.
 
-![task 4 screenshot c](screenshots/task_4_c.png?raw=true)
+![task 5 screenshot c](screenshots/task_5_c.png?raw=true)
 
 Finally, to actually get our bot running, we need to tell Heroku to give us a free *dyno* (something like a processor). Go to *Free Dynos* under the *Resources* tab and enable the toggle button where it says `worker python catbot/catbot.py`. It should look something like this assuming you've followed the steps correctly.
 
-![task 4 screenshot d](screenshots/task_4_d.png?raw=true)
+![task 5 screenshot d](screenshots/task_5_d.png?raw=true)
 
 ___
 
