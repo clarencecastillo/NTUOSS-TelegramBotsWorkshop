@@ -35,9 +35,9 @@ ___
 <!-- TODO: write about telegram -->
 
 For this tutorial, we'll be creating a *Cat Bot* which allows users to
-1. get random facts about cats
-2. get random cat pictures
-3. talk to an actual cat *LIVE*\*
+1. get random facts about cats,
+2. get random cat pictures, and
+3. talk to an actual cat *LIVE*!\*
 
 #### 0.2 Initial Setup
 
@@ -45,16 +45,21 @@ For this tutorial, we'll be creating a *Cat Bot* which allows users to
     1.  [Atom](https://atom.io/)
     2.  [Sublime Text 3](http://www.sublimetext.com/3)
     3.  [Brackets](http://brackets.io/)
-2.  Download [this project](https://github.com/clarencecastillo/NTUOSS-TelegramBotsWorkshop/archive/master.zip) and unzip the folder to your preferred workspace to get started.
+2.  Download [this project](https://github.com/clarencecastillo/NTUOSS-TelegramBotsWorkshop/archive/master.zip) and unzip the folder to your preferred workspace.
 3.  Download [Telegram Desktop](https://desktop.telegram.org/) if you want easier access to quickly debug your bot.
-4.  Download required Python 3.6.x packages:
+4.  Download the following required Python 3.6.x packages:
     1.  [telepot](https://github.com/nickoala/telepot)
     2.  [requests](https://github.com/requests/requests)
     1.  [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/)
+5.  If you don't already have these accounts, sign up for [Heroku](https://signup.heroku.com) and [Dropbox](https://db.tt/v1tjjEafrg)\**.
+6.  Download Dropbox [desktop client](https://www.dropbox.com/install).
 
 > **Note**<br>
 > The easiest way to install python modules is via [pip](https://pypi.python.org/pypi/pip). Running this one-liner will install all of the required modules indicated above:
 > <br>`pip install telepot requests beautifulsoup4`
+
+\* *No cats were harmed in the making of this workshop.*
+<br>\** *Get extra 500mb when you sign up using this link.*
 
 ## Task 1 - BotFather
 
@@ -120,7 +125,7 @@ The token should look something like this:
 
 ![task 1.3 screenshot a](screenshots/task_1_3_a.png?raw=true)
 
-Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our Cat Bot. To start off, open `catbot/catbot.py` on your text editor and paste following on the line indicated within `def on_chat_message(msg)`:
+Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our Cat Bot. To start off, open `catbot/catbot.py` on your text editor and paste the following snippet to where the indicated `TODO` is at (subsequent pasting of snippets will follow the same way):
 
 ```python
 # TODO: Create Hello World
@@ -197,7 +202,7 @@ The idea is to take care of a simulated cat using our bot. The cat's behavior an
 
 ![task 2.1 screenshot a](screenshots/task_2_1_a.png?raw=true)
 
-Let's update our code by adding logic which would route the program flow according to the user's command.
+Let's update our code by adding routing logic which would direct the program flow according to the user's command.
 
 ```python
 # TODO: Implement Command Handling
@@ -207,8 +212,9 @@ if (msg_text.startswith('/')):
     # parse the command excluding the '/' and other arguments
     command = msg_text[1:].lower().split()[0]
 
-    # prepare the correct response given the command
+    # prepare the correct response based on the given command
     if (command == 'ask'):
+        # TODO: Call Get Random Cat Fact
         response = 'Meow? *licks paws*'
     elif (command == 'status'):
         response = cat_bot.get_status()
@@ -246,7 +252,9 @@ Notice that we can actually send multiple messages to the user within the contex
 
 Besides receiving, parsing and sending message back and forth, Telegram Bots allow richer interactions with the user using keyboards. To prevent our user from *accidentally* `/kitty`-ing our live cat, we can prompt the user again to confirm this action. To do this, let's add an **Inline Keyboard** which we could use to prompt the user to confirm his/her action.
 
-Find your way to `# TODO: Confirm User Action Using Keyboard` and then replace everything under that with with the following:
+![task 2.2 screenshot a](screenshots/task_2_2_a.png?raw=true)
+
+Replace the previous implementation of handling `/kitty` with the following:
 
 ```python
 # TODO: Confirm User Action Using Keyboard
@@ -271,7 +279,7 @@ else:
     bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
 ```
 
-While you're at it, don't forget to import `InlineKeyboardMarkup` and `InlineKeyboardButton` from `telepot.namedtuple` at the beginning of our code:
+While you're at it, don't forget to import `InlineKeyboardMarkup` and `InlineKeyboardButton` from `telepot.namedtuple` at the beginning of our code. This will load the necessary classes required to build our inline keyboard.
 
 ```python
 # TODO: Import Keyboards
@@ -279,7 +287,7 @@ While you're at it, don't forget to import `InlineKeyboardMarkup` and `InlineKey
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 ```
 
-To handle the inline keyboard *on press* event, let's add some logic to our `on_callback_query` which would be called whenever the user presses any buttons on our custom keyboard. Paste the following right where `# TODO: Handle Callback Query` is at:
+To handle the inline keyboard *on press* event, let's add some logic to our `on_callback_query`. This handler is to be called whenever the user presses any buttons on our custom keyboard. More specifically, this function is called whenever a callback query is initiated. Go ahead and paste the following code:
 
 ```python
 # TODO: Handle Callback Query
@@ -288,7 +296,7 @@ To handle the inline keyboard *on press* event, let's add some logic to our `on_
 inline_message_id = msg['message']['chat']['id'], msg['message']['message_id']
 bot.editMessageReplyMarkup(inline_message_id, reply_markup=None)
 
-# kill cat on confirm
+# kill cat (brutally) on confirm
 if (query_data == 'kitty-confirm'):
     cat_bot = Cat(bot_name)
     bot.sendMessage(from_id, 'Meow!!!')
@@ -303,16 +311,134 @@ else:
     bot.sendMessage(from_id, text='*licks your face*')
 ```
 
+![task 2.2 screenshot b](screenshots/task_2_2_b.png?raw=true)
+
+Note that we've manually set the inline keyboard to hide itself when the user makes his/her selection. Leaving it on otherwise would leave a free *kill switch* lying around and I think that's not very healthy for our cat.
+
 ## Task 3 - Dynamic Content
 
 #### 3.1 APIs
 
+Now that we've finished most of our bot's basic functionalities, let's add some dynamic content to spice things up. I mean, wouldn't it be very nice to hear your cat say something smart for once - aside from that very mundane *meow* of course.
+
+![task 3.1 screenshot](screenshots/task_3_1.png?raw=true)
+
+APIs are application interfaces that use HTTP requests to query or update data. Most public databases usually expose an endpoint (aka API) free of charge, but others may require permission or a license to use. If you're looking for something free and easy, I recommend looking up [ProgrammableWeb](https://www.programmableweb.com/)'s catalog of APIs. I'm sure there's something over there you can use for your own projects.
+
+For this step, we'll be using [Cat Facts API](https://catfact.ninja) to give us a random cat fact (obviously). Technically, there are several ways to implement this but for simplicity, we will be using the library `requests` to help us send an HTTP GET request.
+
+In `catbot/catbot.py`, create a function `get_random_cat_fact()` which sends an HTTP GET request to [Cat Facts API](https://catfact.ninja), parses the response, and returns the cat fact as a string. Don't forget to import `requests` at the top of the file.
+
+```python
+# TODO: Get Random Cat Fact
+
+def get_random_cat_fact():
+    response = requests.get('https://catfact.ninja/fact').json()
+    return response['fact']
+```
+
+```python
+# TODO: Import Requests
+
+import requests
+```
+
+Once that's done, we need to call this function inside our message handlers so our user can actually see the results. Back to where we did our command routing, replace the entire clause where `/ask` was previously handled with the following:
+
+```python
+# TODO: Call Get Random Cat Fact
+
+# prepare response with random cat fact if cat is alive
+if (cat_bot.is_alive):
+    response = 'Meow! ' + get_random_cat_fact()
+else:
+    response = 'This cat is currently unavailable.'
+```
+
 #### 3.2 Web Scraping
 
-#### 3.3 Asynchronous
+Sometimes the information we need may not be easily accessible via an API. For cases like this, we need to use `BeautifulSoup4` to parse an HTML page, traverse to the DOM element as specified by a selector, and then extract the attribute or text which is the exact data that we need.
+
+One way we could improve our cat bot is to send a random cat image every time the `/status` command is invoked. We could, of course, just manually save some cat pictures to a local folder somewhere, but that wouldn't really give us rich *dynamic* content because realistically, one can only have so much cat pictures in one computer.
+
+![task 3.2 screenshot a](screenshots/task_3_2_a.png?raw=true)
+
+There are probably hundreds of cat image collections out there (some even with APIs), but for this example, we'll be using [Cutestpaw]('www.cutestpaw.com') because of how simple they've structured their DOM tree. Similar to the previous step, add the following snippets to `catbot/catbot.py`:
+
+```python
+# TODO: Import Random and BeautifulSoup
+
+import random
+from bs4 import BeautifulSoup
+```
+
+```python
+# TODO: Get Random Cat Image URL
+
+def get_random_cat_image_url():
+
+    # get a random page number
+    max_pages = 296
+    random_page_number = random.randint(1, max_pages)
+
+    # get the random page
+    rand_cat_image_url = 'http://www.cutestpaw.com/tag/cats/page/' + str(random_page_number)
+    response = requests.get(rand_cat_image_url)
+
+    # load the page into bs4 and get random image
+    soup = BeautifulSoup(response.text, 'html.parser')
+    image_container = soup.find('div', {'id': 'photos'})
+    images = image_container.find_all('img')
+    random_image = random.choice(images)
+
+    return random_image['src']
+```
+
+```python
+# TODO: Send User Random Cat Image
+
+bot.sendChatAction(chat_id, 'upload_photo')
+bot.sendPhoto(chat_id, get_random_cat_image_url())
+```
+
+Notice that for this example, we're also using `requests` to fetch the HTML source. Also, since scraping takes a few extra seconds to do its thing, we need to give the user some sort of feedback to let him/her know what's going on. Instead of sending a message along the lines of “Uploading image, please wait…”, Telegram API already provides us with `sendChatAction` which does exactly what we want. The code above uses `upload_photo` to indicate the type of action.
+
+![task 3.2 screenshot b](screenshots/task_3_2_b.png?raw=true)
 
 ## Task 4 - Deployment
 
-#### 4.1 Git
+The final step is to free our cat bot into the wild, that is, to get it deployed on a server. Of course there's always the option to keep your laptop or device running, but why do that when you can get it up and running on a remote server *for free*?
 
-#### 4.2 Heroku
+To do this, login to your Heroku dashboard ([sign up here](https://signup.heroku.com) if you still don't have one) and create a new app like this:
+
+![task 4 screenshot a](screenshots/task_4_a.png?raw=true)
+
+There's no specific naming convention for catbot deployment applications, but for this instance, let's name our app after our cat like this: `captain-rainbow-bellyrubs-bot` (use your cat's own name you dummy). Note that by default, free accounts only get access to US and Europe servers but it shouldn't be a problem for us whichever region we choose.
+
+Once that's done, head over to *Deployment* in the *Deploy* tab of your new app and link your Dropbox  account ([sign up here](https://db.tt/v1tjjEafrg) if you still don't have one).
+
+As you can see, there are other options for us to choose, but to make thing simple, we're only covering the Dropbox method for this workshop. I recommend you also try the *git* method - you'll learn a lot more useful stuff that way.
+
+If things go as planned, you should see something like the screenshot below after linking your Dropbox account.
+
+![task 4 screenshot b](screenshots/task_4_b.png?raw=true)
+
+Next, we need to copy all of our files into the directory specified in the previous step: `Dropbox/Apps/Heroku/captain-rainbow-bellyrubs-bot`. This one shouldn't be that tough since you've already installed and connected your Dropbox account to your laptop. Just hit the *Deploy* button once all your files are uploaded.
+
+![task 4 screenshot c](screenshots/task_4_c.png?raw=true)
+
+Finally, to actually get our bot running, we need to tell Heroku to give us a free *dyno* (something like a processor). Go to *Free Dynos* under the *Resources* tab and enable the toggle button where it says `worker python catbot/catbot.py`. It should look something like this assuming you've followed the steps correctly.
+
+![task 4 screenshot d](screenshots/task_4_d.png?raw=true)
+
+___
+
+## Acknowledgements
+
+Many thanks to [anqitu](https://github.com/anqitu) for carefully testing this walkthrough and to everybody else in [NTU Open Source Society](https://github.com/ntuoss) committee for making this happen! :kissing_heart::kissing_heart::kissing_heart:
+
+## Resources
+
+[Telepot Docs](http://telepot.readthedocs.io/en/latest/#)
+<br>[Telegram Bot API Docs](https://core.telegram.org/bots/api)
+<br>[NTU CampusBot](https://github.com/clarencecastillo/ntu-campusbot)
