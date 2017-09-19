@@ -11,34 +11,34 @@ class MessageCounter(telepot.helper.ChatHandler):
     count = 0
 
     gname_dict = {
-    'a':        'Fluffy',
-    'n':	'Cuddles',
-    'b':	'Banana',
-    'o':	'Sparkly',
-    'c':	'Rainbow',
-    'p':	'Fatty',
-    'd':	'Mainbitch',
-    'q':	'Querty',
-    'e':	'Buddy',
-    'r':	'Hairy',
-    'f':	'Kissy',
-    's':	'Sassy',
-    'g':	'Bitchy',
-    't':	'Motherfucker',
-    'h':	'Kitty',
-    'u':	'Cutiepie',
-    'i':	'Handsome',
-    'v':	'Scratchy',
-    'j':	'Stormy',
-    'w':	'Moon',
-    'k':	'Pussy',
-    'x':	'Pouncey',
-    'l':	'Spiderpig',
-    'y':	'Lucky',
-    'm':	'Midnight',
-    'z':	'Snowy'
+        'a': 'Fluffy',
+        'n': 'Cuddles',
+        'b': 'Banana',
+        'o': 'Sparkly',
+        'c': 'Rainbow',
+        'p': 'Fatty',
+        'd': 'Mainbitch',
+        'q': 'Querty',
+        'e': 'Buddy',
+        'r': 'Hairy',
+        'f': 'Kissy',
+        's': 'Sassy',
+        'g': 'Bitchy',
+        't': 'Motherfucker',
+        'h': 'Kitty',
+        'u': 'Cutiepie',
+        'i': 'Handsome',
+        'v': 'Scratchy',
+        'j': 'Stormy',
+        'w': 'Moon',
+        'k': 'Pussy',
+        'x': 'Pouncey',
+        'l': 'Spiderpig',
+        'y': 'Lucky',
+        'm': 'Midnight',
+        'z': 'Snowy'
     }
-   
+
     matric_list = ['Mister', 'Moon', 'Miss', 'Sir',
                   'Lord', 'Captain', 'Lady', 'General',
                   'Princess', 'Professor']
@@ -47,8 +47,6 @@ class MessageCounter(telepot.helper.ChatHandler):
                'Wiggles', 'Fluffles', 'Munchkin', 'Moon',
                'Cheeks', 'Meowers']
 
-
-   
     def __init__(self, *args, **kwargs):
         super(MessageCounter, self).__init__(*args, **kwargs)
         self.catname = ''
@@ -72,7 +70,7 @@ class MessageCounter(telepot.helper.ChatHandler):
             self.daybirth = int(day)
         except:
             pass
-    
+
     def gpaHandle(self, gpa):
         try:
             gpa = float(gpa)
@@ -82,7 +80,7 @@ class MessageCounter(telepot.helper.ChatHandler):
 
     def on_chat_message(self, msg):
         self.count += 10
-        
+
         chat_id = msg['chat']['id']
         command = msg['text'].lower()
 
@@ -110,11 +108,6 @@ class MessageCounter(telepot.helper.ChatHandler):
             bot.sendMessage(chat_id, "Your cat name is " + self.catname +
                             ". Go tell your friends about it, if you have any hahaha")
             self.count = 0
-
-
-      
-        
-
 
 bot = telepot.DelegatorBot('432090010:AAF2aLZ3o2VWtb-JGT2X7rSsn1fTcTMRigE', [
     pave_event_space()(per_chat_id(), create_open, MessageCounter, timeout=100),])

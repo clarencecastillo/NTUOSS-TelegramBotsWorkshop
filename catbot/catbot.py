@@ -48,5 +48,5 @@ while True:
     if (time.time() - cat_last_update > 24/4*60*60):
         cat_bot.on_update()
         cat_last_update = time.time()
-        
+
 # ------------------------ WRITE YOUR CODES ABOVE THIS LINE ------------------------ #
