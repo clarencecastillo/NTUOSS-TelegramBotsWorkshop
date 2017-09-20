@@ -16,8 +16,12 @@ from cat import Cat
 
 # TODO: 3.2.1 Import Random and BeautifulSoup ########################################
 
+# TODO: 4.1.1 Import DelegatorBot ####################################################
+
 # TODO: 1.3.2 Replace Token ##########################################################
 TOKEN = ''
+
+# TODO: 4.1.2 Wrap CatBot Class ######################################################
 
 # TODO: 3.1.1 Get Random Cat Fact ####################################################
 
@@ -40,12 +44,11 @@ def on_callback_query(msg):
     bot.answerCallbackQuery(query_id)
 
 # bootstrap the bot and spawn the cat
-bot = telepot.Bot(TOKEN)
+# TODO: 4.1.3 Implement DelegatorBot #################################################
+MessageLoop(bot).run_as_thread()
+
 bot_name = bot.getMe()['first_name']
 cat_bot = Cat(bot_name)
-
-MessageLoop(bot, {'chat': on_chat_message,
-                  'callback_query': on_callback_query}).run_as_thread()
 print('Meow! ' + bot_name + ' at your service...')
 
 # keep the program running and simulate cat life

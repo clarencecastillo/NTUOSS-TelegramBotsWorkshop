@@ -408,61 +408,72 @@ Notice that for this example, we're also using `requests` to fetch the HTML sour
 
 ![task 3.2 screenshot b](screenshots/task_3_2_b.png?raw=true)
 
+Good on you for making it this far! We're almost done but just a quick heads up: the following section describes advanced topics beyond the scope of what CZ1003 covers (for those taking that mod). Some parts may look very alien and may require a bit more time to understand, but hey, I'm sure you'll do *fine*.
+
 ## Task 4 - Conversations
 
 #### 4.1 Bot Delegation
 
-Normally, a bot is made to be used by more than one user. You wouldn't want your users' messages to get mixed up, would you? No, that's not very *classy*. This is why have to create separate instances for each user.
+Normally, a bot is made to be used by more than one user. However, as it stands, our cat bot spawns only a single instance of itself. That means Captain Rainbow Bellyrubs collectively treats everybody it talks to as the same damn person! The problem may not be obvious at first but you wouldn't want your users' messages to get mixed up, would you? No, that's not very *classy* (premature pun). This is why we have to create separate instances for each user.
 
-This next part is a little tricky - we are going to take all the previous code you wrote... and throw them out the window!
-
-Nah, but we are gonna wrap it in something called a `class`.
-
-First, open up `examples/multi_catbot.py`. Navigate way below the huge chunks of text (they will be for later), until you get to the line `class MessageCounter(telepot.helper.ChatHandler):`. Paste the code for the catbot functions under the appropriate function names.
-
-*If you look at the imported modules section at the top, you may see a couple of additional imports. The one that helps us keep separate conversations is `DelegatorBot`.*
+To do this, we need to import a few modules that would help our catbot spawn multiple instances of itself. You don't really need to know what each import does but just know that `DelegatorBot` is the one that helps us keep separate conversations.
 
 ```python
-class MessageCounter(telepot.helper.ChatHandler):
+# TODO: 4.1.1 Import DelegatorBot
 
-
-   def __init__(self, *args, **kwargs):
-      super(MessageCounter, self).__init__(*args, **kwargs)
-      self.state = 0
-      self.language = ''
-      self.feel = 0
-      self.ans = 0
-
-
-   # TODO: Paste functions here (make sure the indentations are right)
-   #-------------- Insert catboy functions in between ---------------#
-   def get_random_cat_fact(self):
-      return
-
-   def get_random_cat_image_url(self):
-      return
-
-   def on_chat_message(self, msg):
-      return
-
-   def on_callback_query(self, msg):
-      return
-   #-----------------------------------------------------------------#
+import DelegatorBot
+from telepot.delegate import pave_event_space, per_chat_id, create_open
 ```
-Your sharp eyes may have noticed the additional argument `self` for each function. This is an *Object-Oriented Programming* concept, where we create an `object` for each user. Each of these `objects` have the same starting attributes, and are independent of one another.
 
-Now, just add your own API token in, and let `DelegatorBot` do the rest of the heavy lifting.
+This next part is a little tricky - we are gonna wrap all we've done into something called a `class`. Paste the following snippet and place all of the other functions we've written under this in the same level as `__init__` (by indentation).
 
 ```python
-# TODO: Insert own API token here
-TOKEN = ''
-bot = telepot.DelegatorBot(TOKEN,
-                           [pave_event_space()
-                            (per_chat_id(),
-                             create_open,
-                             MessageCounter,
-                             timeout=100),])
-```                             
+# TODO: 4.1.2 Wrap CatBot Class
+
+class CatBot(telepot.helper.ChatHandler):
+
+    def __init__(self, *args, **kwargs):
+        super(CatBot, self).__init__(*args, **kwargs)
+        self.state = 0
+        self.language = ''
+        self.feel = 0
+        self.ans = 0
+```
+
+Now that all the functions we've written are members of `CatBot`, we need to insert an additional parameter `self` to each of these functions. This is an *Object-Oriented Programming* approach where we create an instance of this `CatBot` *object* for each user that converses with our bot. Each of these *objects* have the same starting attributes, and are independent of one another.
+
+Go ahead and add the special parameter `self` as shown below. Note that this new parameter should precede all other parameters in the function signature should it already have others written.
+
+```python
+# TODO: 4.1.2 Wrap CatBot Class
+
+def get_random_cat_fact(self):
+  ...
+
+def get_random_cat_image_url(self):
+  ...
+
+def on_chat_message(self, msg):
+  ...
+
+def on_callback_query(self, msg):
+  ...
+```
+
+For all calls to these functions, we also need to prepend it with `self.` as these functions now live under `CatBot`. In particular, `get_random_cat_fact()` as implemented in `TODO 3.1.3` should now be `self.get_random_cat_fact()` and `get_random_cat_image_url()` in `TODO 3.2.3` should now be `self.get_random_cat_image_url()`.
+
+Now, just replace our previous bootstrap code with the new one below and let `DelegatorBot` do the rest of the heavy lifting.
+
+```python
+# TODO: 4.1.3 Implement DelegatorBot
+
+bot = DelegatorBot(TOKEN, [
+    pave_event_space()
+    (per_chat_id(), create_open, CatBot, timeout=20)
+])
+MessageLoop(bot).run_as_thread()
+```
+
 That's it! Give yourself a pat on the back you clever cat you.
 
 #### 4.2 State Machines
