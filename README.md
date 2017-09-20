@@ -138,11 +138,9 @@ if content_type == 'text':
 
     # get message payload
     msg_text = msg['text']
-    msg_sender = msg['from']['username']
-    print('Received: "' + msg_text + '" from ' + msg_sender)
 
-    response += ' Hi ' + msg_sender + '. Hello world! '
     # TODO: 2.1.1 Implement Command Handling #####################################
+    response += ' Hello world!'
 
 # send the response
 bot.sendMessage(chat_id, response)
