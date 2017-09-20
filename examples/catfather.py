@@ -223,7 +223,7 @@ class MessageCounter(telepot.helper.ChatHandler):
                     [KeyboardButton(text=self.text1)],
                     [KeyboardButton(text=self.text2)],
                     [KeyboardButton(text=self.text3)],
-                    [KeyboardButton(text=self.text2)]
+                    [KeyboardButton(text=self.text4)]
                 ])
                 bot.sendMessage(chat_id, "Okay, let's get started with the tasks!\n\
                     Click on a task when you're done.", reply_markup=markup)
@@ -242,12 +242,20 @@ line += (('|' + ' '*8)*5 + '|\n')
 line += ('| Task 0 | Task 1 | Task 2 | Task 3 | Task 4 |\n')
 line += (('|' + ' '*8)*5 + '|\n')
 line += (('+' + '-'*8)*5 + '+\n')
+
+c = open("tasks.csv", "a")
+c.write('Task 1,Task 2,Task 3,Task 4,Task 5\n')
+c.close
+
 while True:
+    cline = ''
     time.sleep(5)
     print('update')
     for x in tasks:
         line += ('|{0:5}   '.format(x))
+        cline += str(x) + ','
     line += '|\n'
+    cline += '\n'
     
     line += (('+' + '-'*8)*5 + '+\n')
     for x in tasks:
@@ -259,3 +267,10 @@ while True:
     f = open("people.txt", "w")
     f.write(line)
     f.close()
+
+    c = open("tasks.csv", "a")
+    c.write(cline)
+    c.close()
+    
+
+    
