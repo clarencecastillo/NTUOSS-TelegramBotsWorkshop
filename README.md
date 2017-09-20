@@ -1,4 +1,4 @@
-# NTUOSS Telegram Bots Workshop
+﻿# NTUOSS Telegram Bots Workshop
 
 *by [Clarence Castillo](https://github.com/clarencecastillo) and [Steve Ye](https://github.com/HandsomeJeff) for NTU Open Source Society*
 
@@ -13,7 +13,7 @@ ___
 **Who**: NTU Open Source Society
 
 ### Questions
-Please raise your hand any time during the workshop or email your questions to [me](mailto:hello@clarencecastillo.me) later.
+Please raise your hand any time during the workshop or email your questions to [me](mailto:hello@clarencecastillo.me) or [Steve](mailto:yefan0072001@gmail.com) later.
 
 ### Errors
 For errors, typos or suggestions, please do not hesitate to [post an issue](https://github.com/clarencecastillo/NTUOSS-TelegramBotsWorkshop/issues/new). Pull requests are very welcome! Thanks!
@@ -106,6 +106,10 @@ Since we need unique names for our Cat Bots, you can name your bot after your ve
 | 4 | `Cheeks` | 9 | `Meowers` |
 
 For example, if my matriculation number is U1359234X, my cat bot's honorific would be `Captain` as derived from `(1+3+5+9+2+3+4)%10 = 7` . Combined with my name's first initial `C` (which maps to `Rainbow`) and given my *5.0* GPA times the day of my birth 20, `5.0*20%10 = 0` (which maps to `Bellyrubs`), my cat bot's full name would be `Captain Rainbow Bellyrubs`. Consequently, my cat bot's username would be `captainrainbowbellyrubscatbot`.
+
+For you lazy bums out there, Steve built a bot that helps you figure out your cat name for you (code in the `examples` folder). Its name is `CatFather`. You can find it by its handle `@CatMotherBot` (because feminism?). Oh, and when you're done naming your cat, you will be greeted with the opportunity help us track our task completion rate. Neat, huh?
+
+*We will host `CatFather` for this session only.*
 
 #### 1.2 Acquire Telegram HTTP API Token
 
@@ -403,6 +407,276 @@ bot.sendPhoto(chat_id, get_random_cat_image_url())
 Notice that for this example, we're also using `requests` to fetch the HTML source. Also, since scraping takes a few extra seconds to do its thing, we need to give the user some sort of feedback to let him/her know what's going on. Instead of sending a message along the lines of “Uploading image, please wait…”, Telegram API already provides us with `sendChatAction` which does exactly what we want. The code above uses `upload_photo` to indicate the type of action.
 
 ![task 3.2 screenshot b](screenshots/task_3_2_b.png?raw=true)
+
+## Task 4 - Conversations
+
+#### 4.1 Bot Delegation
+
+Normally, a bot is made to be used by more than one user. You wouldn't want your users' messages to get mixed up, would you? No, that's not very *classy*. This is why have to create separate instances for each user.
+
+This next part is a little tricky - we are going to take all the previous code you wrote... and throw them out the window!
+
+Nah, but we are gonna wrap it in something called a `class`.
+
+First, open up `examples/multi_catbot.py`. Navigate way below the huge chunks of text (they will be for later), until you get to the line `class MessageCounter(telepot.helper.ChatHandler):`. Paste the code for the catbot functions under the appropriate function names.
+
+*If you look at the imported modules section at the top, you may see a couple of additional imports. The one that helps us keep separate conversations is `DelegatorBot`.*
+
+```python
+class MessageCounter(telepot.helper.ChatHandler):
+
+
+   def __init__(self, *args, **kwargs):
+      super(MessageCounter, self).__init__(*args, **kwargs)
+      self.state = 0
+      self.language = ''
+      self.feel = 0
+      self.ans = 0
+
+
+   # TODO: Paste functions here (make sure the indentations are right)
+   #-------------- Insert catboy functions in between ---------------#
+   def get_random_cat_fact(self):
+      return
+
+   def get_random_cat_image_url(self):
+      return
+
+   def on_chat_message(self, msg):
+      return
+
+   def on_callback_query(self, msg):
+      return
+   #-----------------------------------------------------------------#
+```
+Your sharp eyes may have noticed the additional argument `self` for each function. This is an *Object-Oriented Programming* concept, where we create an `object` for each user. Each of these `objects` have the same starting attributes, and are independent of one another.
+
+Now, just add your own API token in, and let `DelegatorBot` do the rest of the heavy lifting.
+
+```python
+# TODO: Insert own API token here
+TOKEN = ''
+bot = telepot.DelegatorBot(TOKEN,
+                           [pave_event_space()
+                            (per_chat_id(),
+                             create_open,
+                             MessageCounter,
+                             timeout=100),])
+```                             
+That's it! Give yourself a pat on the back you clever cat you.
+
+#### 4.2 State Machines
+
+Often, people are looking for more than just a Q&A catbot. They are looking for a catbot  who will respond based on your responses to their responses (and so forth). A catbot with whom they might share a genuine conversation.
+
+Okay, maybe it's not entirely genuine, but it's pretty close. We will use the idea of *saved states* to build a catbot who will actually listen and care.
+*(Warning: catbot may not listen or care)*
+
+The concept is pretty simple:
+Let `State 0` be the so called "rest state". When you initiate a specific interaction with the catbot, it will move on to the next state `State 10`.
+
+At `State 10`, the catbot can do a specific set of tasks. Based on user input, the catbot can then move on to other states, where it can perform other sets of tasks specific to that given state.
+
+Whew, I hope I hadn't bored you off yet. Let's do a bit of coding, shall we? First, let's initialise the state with a new command `/speak`. Insert it just after the condition for the `/kitty` command.
+
+```python
+             # kill cat function 'kitty' (why would you)
+             elif (command == 'kitty'):
+                 # blah blah blah kill this cat
+
+             # TODO: insert 'speak' condition
+             # begin interaction with saved states with 'speak' command
+             elif (command == 'speak' and self.state == 0):
+                 self.state = 10
+
+                 # prepares a custom keyboard
+                 markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+                     [KeyboardButton(text='English')], [KeyboardButton(text='Spanish')],
+                     [KeyboardButton(text='German')], [KeyboardButton(text='Nevermind')]
+                 ])
+                 bot.sendMessage(chat_id, 'Meow meow mrow hisss:\n1. English\
+                 \n2. Spanish\n3. German', reply_markup=markup)
+```
+
+As you can see, if a user sends a `/speak` command at `State 0`, `State 10` will be initialised, and a custom keyboard is generated to help the user further the conversation, in English, Spanish, or German! Now that is one multilingual cat!
+
+Now, let's alter more code such that we can insert additional states. Replace this segment here:
+
+```python
+else:
+
+    # talk to the cat if no command was matched
+    response = cat_bot.chat()
+```
+With the following:
+
+```python
+else:
+    # TODO: insert interactions with various states (0 to 30)
+
+    # separates responses into before and after 'speak' has been called
+    if (self.state > 0):
+        command = msg_text.lower()
+
+        # TODO: insert code for state 10
+
+
+        # TODO: add in code for state 20
+
+
+        # TODO: add in state 30
+
+
+    else:
+        # talk to the cat if no command was matched
+        # and 'speak' not initialised
+        response = cat_bot.chat()
+```
+Now, for `State 10`, we'll make catbot give a warm greeting based on the language the user chose in the previous state. The custom keyboard gives the options to continue or end the "conversation".
+
+```python
+# TODO: insert code for state 10
+
+# first state after initialisation, assign language based on
+# user choice
+if (self.state == 10):
+   if (command != "nevermind"):
+       if (command == "english"):
+           self.language = 'eng'
+           self.state = 20
+           markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+               [KeyboardButton(text='I am indeed')], [KeyboardButton(text='Nope')]
+           ])
+           resp = "Well met! Ah, a fellow purveyor of the Anglo-Saxon tongue, I see."
+       elif (command == "spanish"):
+           self.language = 'spa'
+           self.state = 20
+           markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+               [KeyboardButton(text='Si senor')], [KeyboardButton(text='No se')]
+           ])
+           resp = "Hola mi amigo! Parece que hablas espanol. Te gustaria hablar conmigo?"
+
+       elif (command == "german"):
+           self.language = 'ger'
+           self.state = 20
+           markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+               [KeyboardButton(text='Ja')], [KeyboardButton(text='Nein')]
+           ])
+           resp = "Heute Deutschland, morgen die ganze welt! Warte, ich scherze nur! Komm zuruck!"
+       bot.sendMessage(chat_id, resp, reply_markup=markup)
+   else:
+       self.state = 0
+       resp = "*perhaps it's best to not think about it, eh?"
+       bot.sendMessage(chat_id, resp)
+
+```
+
+Now, if the user chooses to go along with the "conversation", `State 20` will be initialised. This is where the top portion with all the lists of texts comes in. I'm sorry, but this is basically how you fill the vocabulary of a chat bot. It's the ugly truth no one wants to hear.
+
+Catbot will ask a random question from the list, with a custom keyboard of the available answers. Choose wisely! For there is actually a correct answer to each question.
+
+```python
+# TODO: add in code for state 20
+
+# second state after initialisation, takes in user input and asks
+# a question accordingly
+elif (self.state == 20):
+    resp = ''
+    self.feel = random.randrange(3)
+    if (self.language == 'eng'):
+        if (command == 'i am indeed'):
+            self.state = 30
+            markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+                [KeyboardButton(text='I love it')], [KeyboardButton(text='Meh')],
+                [KeyboardButton(text='I hate it')], [KeyboardButton(text='I want out')]
+            ])
+            resp += random.choice(eng_prompt)
+            resp += random.choice(englist[self.feel])
+            resp += '?'
+            bot.sendMessage(chat_id, resp, reply_markup=markup)
+        else:
+            self.state = 0
+            resp = "That's a shame."
+            bot.sendMessage(chat_id, resp)
+    elif (self.language == 'ger'):
+        if (command == 'ja'):
+            self.state = 30
+            markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+                [KeyboardButton(text='Ich liebe es')], [KeyboardButton(text='Meh')],
+                [KeyboardButton(text='Ich hasse es')], [KeyboardButton(text='Ich will gehen')]
+            ])
+            resp += random.choice(ger_prompt)
+            resp += random.choice(gerlist[self.feel])
+            resp += '?'
+            bot.sendMessage(chat_id, resp, reply_markup=markup)
+        else:
+            self.state = 0
+            resp = "Das ist zu schade."
+            bot.sendMessage(chat_id, resp)
+    elif (self.language == 'spa'):
+        if (command == 'si senor'):
+            self.state = 30
+            markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
+                [KeyboardButton(text='Me gusta')], [KeyboardButton(text='Meh')],
+                [KeyboardButton(text='No me gusta')], [KeyboardButton(text='Quiero irme')]
+            ])
+            resp += random.choice(spa_prompt)
+            resp += random.choice(spalist[self.feel])
+            resp += '?'
+            bot.sendMessage(chat_id, resp, reply_markup=markup)
+        else:
+            self.state = 0
+            resp = "Eso es muy malo."
+            bot.sendMessage(chat_id, resp)
+
+```
+
+Next, assuming the user hasn't quit the conversation yet, `State 30` is initialised. Here, catbot responds based on the user's previous answer. For example, catbot asked about `Hitler` and the answer is `I love it!`, then catbot will be angry, and respond with a random insult. *This goes for real life - don't go around telling people you love Hitler. It won't end well for you*
+
+```python
+# TODO: add in state 30
+
+# third state after initialisation, takes in user input, remembers
+# the previous question, and responds in the context of the question in the second state
+elif (self.state == 30):
+    resp = ''
+    if (command == 'i love it' or command == 'ich liebe es' or command == 'me gusta'):
+        self.ans = 0
+    elif (command == 'meh'):
+        self.ans = 1
+    elif (command == 'i hate it' or command == 'ich hasse es' or command == 'no me gusta'):
+        self.ans = 2
+    else:
+        self.ans = 3
+
+    if (self.ans == 3):
+        self.state = 0
+        resp = "*Was it all a dream? You could have sworn that cat just spoke to you..."
+    else:
+        if self.language == 'eng':
+            if (self.feel == self.ans):
+                resp = random.choice(eng_goodresp)
+            else:
+                resp = random.choice(eng_badresp)
+        elif self.language == 'ger':
+            if (self.feel == self.ans):
+                resp = random.choice(ger_goodresp)
+            else:
+                resp = random.choice(ger_badresp)
+        elif self.language == 'spa':
+            if (self.feel == self.ans):
+                resp = random.choice(spa_goodresp)
+            else:
+                resp = random.choice(spa_badresp)
+        self.state = 0
+        bot.sendMessage(chat_id, resp)
+```
+
+Thus ends this "conversation". The state reverts back to `State 0`. Of course, you can always insert more states to extend the feeling of actually talking to someone.
+
+![task 1.3 screenshot b](screenshots/task_5_2_a.png?raw=true)![task 1.3 screenshot b](screenshots/task_5_2_b.png?raw=true)
+
+This is it for interacting with saved states. The full, working code may be found under `examples/multi_catbot.py`.
 
 ## Task 5 - Deployment
 
