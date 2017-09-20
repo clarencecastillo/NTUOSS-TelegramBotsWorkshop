@@ -128,7 +128,7 @@ The token should look something like this:
 Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our Cat Bot. To start off, open `catbot/catbot.py` on your text editor and paste the following snippet to where the indicated `TODO` is at (subsequent pasting of snippets will follow the same way):
 
 ```python
-# TODO: Create Hello World
+# TODO: 1.3.1 Create Hello World
 
 # default response (feel free to change it)
 response = 'Meow!'
@@ -141,8 +141,8 @@ if content_type == 'text':
     msg_sender = msg['from']['username']
     print('Received: "' + msg_text + '" from ' + msg_sender)
 
-    # TODO: Implement Command Handling
     response += ' Hi ' + msg_sender + '. Hello world! '
+    # TODO: 2.1.1 Implement Command Handling #####################################
 
 # send the response
 bot.sendMessage(chat_id, response)
@@ -150,7 +150,7 @@ bot.sendMessage(chat_id, response)
 
 Don't forget to add in our bot's API token:
 ```python
-# TODO: Replace Token
+# TODO: 1.3.2 Replace Token
 
 TOKEN = '2351749591:VskzWEJdWj_rlCx23Hyu5mIJdWjTVskzdEx'
 ```
@@ -205,7 +205,7 @@ The idea is to take care of a simulated cat using our bot. The cat's behavior an
 Let's update our code by adding routing logic which would direct the program flow according to the user's command.
 
 ```python
-# TODO: Implement Command Handling
+# TODO: 2.1.1 Implement Command Handling
 
 if (msg_text.startswith('/')):
 
@@ -214,9 +214,10 @@ if (msg_text.startswith('/')):
 
     # prepare the correct response based on the given command
     if (command == 'ask'):
-        # TODO: Call Get Random Cat Fact
+        # TODO: 3.1.3 Call Get Random Cat Fact ###############################
         response = 'Meow? *licks paws*'
     elif (command == 'status'):
+        # TODO: 3.2.3 Send User Random Cat Image #############################
         response = cat_bot.get_status()
     elif (command == 'feed'):
         response = cat_bot.feed()
@@ -224,7 +225,7 @@ if (msg_text.startswith('/')):
         response = cat_bot.clean()
     elif (command == 'kitty'):
 
-        # TODO: Confirm User Action Using Keyboard
+        # TODO: 2.2.1 Confirm User Action Using Keyboard #####################
 
         # kill cat if still alive
         if (cat_bot.is_alive):
@@ -257,7 +258,7 @@ Besides receiving, parsing and sending message back and forth, Telegram Bots all
 Replace the previous implementation of handling `/kitty` with the following:
 
 ```python
-# TODO: Confirm User Action Using Keyboard
+# TODO: 2.2.1 Confirm User Action Using Keyboard
 
 if (cat_bot.is_alive):
 
@@ -282,7 +283,7 @@ else:
 While you're at it, don't forget to import `InlineKeyboardMarkup` and `InlineKeyboardButton` from `telepot.namedtuple` at the beginning of our code. This will load the necessary classes required to build our inline keyboard.
 
 ```python
-# TODO: Import Keyboards
+# TODO: 2.2.2 Import Keyboards
 
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 ```
@@ -290,7 +291,7 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 To handle the inline keyboard *on press* event, let's add some logic to our `on_callback_query`. This handler is to be called whenever the user presses any buttons on our custom keyboard. More specifically, this function is called whenever a callback query is initiated. Go ahead and paste the following code:
 
 ```python
-# TODO: Handle Callback Query
+# TODO: 2.2.3 Handle Callback Query
 
 # close inline keyboard
 inline_message_id = msg['message']['chat']['id'], msg['message']['message_id']
@@ -330,7 +331,7 @@ For this step, we'll be using [Cat Facts API](https://catfact.ninja) to give us 
 In `catbot/catbot.py`, create a function `get_random_cat_fact()` which sends an HTTP GET request to [Cat Facts API](https://catfact.ninja), parses the response, and returns the cat fact as a string. Don't forget to import `requests` at the top of the file.
 
 ```python
-# TODO: Get Random Cat Fact
+# TODO: 3.1.1 Get Random Cat Fact
 
 def get_random_cat_fact():
     response = requests.get('https://catfact.ninja/fact').json()
@@ -338,7 +339,7 @@ def get_random_cat_fact():
 ```
 
 ```python
-# TODO: Import Requests
+# TODO: 3.1.2 Import Requests
 
 import requests
 ```
@@ -346,7 +347,7 @@ import requests
 Once that's done, we need to call this function inside our message handlers so our user can actually see the results. Back to where we did our command routing, replace the entire clause where `/ask` was previously handled with the following:
 
 ```python
-# TODO: Call Get Random Cat Fact
+# TODO: 3.1.3 Call Get Random Cat Fact
 
 # prepare response with random cat fact if cat is alive
 if (cat_bot.is_alive):
@@ -366,14 +367,14 @@ One way we could improve our cat bot is to send a random cat image every time th
 There are probably hundreds of cat image collections out there (some even with APIs), but for this example, we'll be using [Cutestpaw]('www.cutestpaw.com') because of how simple they've structured their DOM tree. Similar to the previous step, add the following snippets to `catbot/catbot.py`:
 
 ```python
-# TODO: Import Random and BeautifulSoup
+# TODO: 3.2.1 Import Random and BeautifulSoup
 
 import random
 from bs4 import BeautifulSoup
 ```
 
 ```python
-# TODO: Get Random Cat Image URL
+# TODO: 3.2.2 Get Random Cat Image URL
 
 def get_random_cat_image_url():
 
@@ -395,7 +396,7 @@ def get_random_cat_image_url():
 ```
 
 ```python
-# TODO: Send User Random Cat Image
+# TODO: 3.2.3 Send User Random Cat Image
 
 bot.sendChatAction(chat_id, 'upload_photo')
 bot.sendPhoto(chat_id, get_random_cat_image_url())

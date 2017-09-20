@@ -10,31 +10,31 @@ import time, telepot
 from telepot.loop import MessageLoop
 from cat import Cat
 
-# TODO: Import Keyboards
+# TODO: 2.2.2 Import Keyboards #######################################################
 
-# TODO: Import Requests
+# TODO: 3.1.2 Import Requests ########################################################
 
-# TODO: Import Random and BeautifulSoup
+# TODO: 3.2.1 Import Random and BeautifulSoup ########################################
 
-# TODO: Replace Token
+# TODO: 1.3.2 Replace Token ##########################################################
 TOKEN = ''
 
-# TODO: Get Random Cat Fact
+# TODO: 3.1.1 Get Random Cat Fact ####################################################
 
-# TODO: Get Random Cat Image URL
+# TODO: 3.2.2 Get Random Cat Image URL ###############################################
 
 def on_chat_message(msg):
     global cat_bot
     content_type, chat_type, chat_id = telepot.glance(msg)
 
-    # TODO: Create Hello World
+    # TODO: 1.3.1 Create Hello World #################################################
 
 def on_callback_query(msg):
     global cat_bot
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     print('Callback Query:', query_id, from_id, query_data)
 
-    # TODO: Handle Callback Query
+    # TODO: 2.2.3 Handle Callback Query ##############################################
 
     # answer callback query or else telegram will forever wait on this
     bot.answerCallbackQuery(query_id)
