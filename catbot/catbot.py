@@ -5,7 +5,7 @@
 
 # ------------------------ WRITE YOUR CODES BELOW THIS LINE ------------------------ #
 
-# import required modules
+import urllib
 import time, telepot
 from telepot.loop import MessageLoop
 from cat import Cat
