@@ -362,7 +362,7 @@ One way we could improve our cat bot is to send a random cat image every time th
 
 ![task 3.2 screenshot a](screenshots/task_3_2_a.png?raw=true)
 
-There are probably hundreds of cat image collections out there (some even with APIs), but for this example, we'll be using [Cutestpaw]('www.cutestpaw.com') because of how simple they've structured their DOM tree. Similar to the previous step, add the following snippets to `catbot/catbot.py`:
+There are probably hundreds of cat image collections out there (some even with APIs), but for this example, we'll be using [Cutestpaw](www.cutestpaw.com) because of how simple they've structured their DOM tree. Similar to the previous step, add the following snippets to `catbot/catbot.py`:
 
 ```python
 # TODO: 3.2.1 Import Random and BeautifulSoup
