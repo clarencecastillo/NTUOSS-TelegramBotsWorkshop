@@ -207,6 +207,7 @@ For this tutorial, we will be using a *very sophisticated* cat simulator class w
     -   `feed()`: Feeds the cat (hunger - 25); returns the cat's response after feeding
     -   `clean()`: Cleans the cat (dirt - 25); returns the cat's response after cleaning
     -   `chat()`: Returns a hyper realistic cat response
+    -   `kill()`: Resets the cat
 
 The idea is to take care of a simulated cat using our bot. The cat's behavior and states have already been taken care of by `cat.py`, so the only thing left for us to do is to link the class' methods to our `on_chat_message` function. Our user would then be able to *take care* of the cat via the commands provided.
 
@@ -243,7 +244,7 @@ if (msg_text.startswith('/')):
             bot.sendMessage(chat_id, cat_bot.name + ' was killed.')
 
         # respawn cat
-        cat_bot = Cat(bot_name)
+        cat_bot.kill()
         bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
     # TODO: 4.2.3 Handle 'meow' Command ######################################
     elif (command == 'meow'):
@@ -292,7 +293,7 @@ if (cat_bot.is_alive):
 else:
 
     # respawn cat
-    cat_bot = Cat(bot_name)
+    cat_bot.kill()
     bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
 ```
 
@@ -320,7 +321,7 @@ if (query_data == 'kitty-confirm'):
     bot.sendMessage(from_id, cat_bot.name + ' was killed.')
 
     #respawn cat
-    cat_bot = Cat(bot_name)
+    cat_bot.kill()
     bot.sendMessage(from_id, '*respawns ' + cat_bot.name + '*')
 else:
     bot.sendMessage(from_id, text='Meowww~~~')

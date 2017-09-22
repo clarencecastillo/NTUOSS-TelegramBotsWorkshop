@@ -5,7 +5,7 @@
 
 # ------------------------ DO NOT TOUCH THIS FILE ------------------------ #
 
-import random
+import random, requests
 
 MAX_HUNGER = 100
 MIN_HUNGER = -100
@@ -16,6 +16,8 @@ MIN_DIRT = -100
 CLEAN_AMOUNT = 50
 
 CYCLES_PER_DAY = 4
+
+DEAD_CAT_COUNTER_URL = 'http://7156e54e.ngrok.io/'
 
 class Cat(object):
 
@@ -81,5 +83,13 @@ class Cat(object):
             return ("Meow " + "meow " * random.randint(0, 4)).strip() + random.choice(["?", "!", ".", "!!", "?!"])
         else:
             return "..."
+
+    def kill(self):
+        # try:
+        #     requests.get(DEAD_CAT_COUNTER_URL + 'kitty')
+        # except:
+        #     pass
+        # self.__init__(self.name)
+        return
 
 # ------------------------ DO NOT TOUCH THIS FILE ------------------------ #
