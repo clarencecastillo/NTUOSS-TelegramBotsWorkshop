@@ -227,8 +227,9 @@ if (msg_text.startswith('/')):
         # TODO: 3.1.3 Call Get Random Cat Fact ###############################
         response = 'Meow? *licks paws*'
     elif (command == 'status'):
+        bot.sendMessage(chat_id, cat_bot.get_status())
         # TODO: 3.2.3 Send User Random Cat Image #############################
-        response = cat_bot.get_status()
+        return
     elif (command == 'feed'):
         response = cat_bot.feed()
     elif (command == 'clean'):
