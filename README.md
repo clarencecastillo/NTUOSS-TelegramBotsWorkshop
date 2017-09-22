@@ -34,7 +34,7 @@ ___
 <!-- TODO: write about this workshop -->
 <!-- TODO: write about telegram -->
 
-For this tutorial, we'll be creating a *Cat Bot* which allows users to
+For this tutorial, we'll be creating a *CatBot* which allows users to
 1. get random facts about cats,
 2. get random cat pictures, and
 3. talk to an actual cat *LIVE*!\*
@@ -65,7 +65,7 @@ For this tutorial, we'll be creating a *Cat Bot* which allows users to
 
 #### 1.1 Name Your Cat Bot
 
-Since we need unique names for our Cat Bots, you can name your bot after your very own cat (or the cat you've never had). That way, BotFather won't likely complain about reserved usernames. If you don't have a cat, I've compiled a *Cat Name Matrix* aka "What's Your Cat Name" that could help you name your cat bot:
+Since we need unique names for our catbot, you can name your bot after your very own cat (or the cat you've never had). That way, BotFather won't likely complain about reserved usernames. If you don't have a cat, I've compiled a *Cat Name Matrix* aka "What's Your Cat Name" that could help you name your catbot:
 
 **Step 1:** Sum of the digits in your Matriculation Number mod 10
 
@@ -105,19 +105,19 @@ Since we need unique names for our Cat Bots, you can name your bot after your ve
 | 3 | `Munchkin` | 8 | `Moon` |
 | 4 | `Cheeks` | 9 | `Meowers` |
 
-For example, if my matriculation number is U1359234X, my cat bot's honorific would be `Captain` as derived from `(1+3+5+9+2+3+4)%10 = 7` . Combined with my name's first initial `C` (which maps to `Rainbow`) and given my *5.0* GPA times the day of my birth 20, `5.0*20%10 = 0` (which maps to `Bellyrubs`), my cat bot's full name would be `Captain Rainbow Bellyrubs`. Consequently, my cat bot's username would be `captainrainbowbellyrubscatbot`.
+For example, if my matriculation number is U1359234X, my catbot's honorific would be `Captain` as derived from `(1+3+5+9+2+3+4)%10 = 7` . Combined with my name's first initial `C` (which maps to `Rainbow`) and given my *5.0* GPA times the day of my birth 20, `5.0*20%10 = 0` (which maps to `Bellyrubs`), my catbot's full name would be `Captain Rainbow Bellyrubs`. Consequently, my catbot's username would be `captainrainbowbellyrubscatbot`.
 
-For you lazy bums out there, Steve built a bot that helps you figure out your cat name for you (code in the `examples` folder). Its name is `CatFather`. You can find it by its handle `@CatMotherBot` (because feminism?). Oh, and when you're done naming your cat, you will be greeted with the opportunity help us track our task completion rate. Neat, huh?
+For you lazy bums out there, Steve built a bot that helps you figure out your catbot's name for you (see `examples\catfather.py`). Its name is `CatFather`. You can find it by its handle `@CatMotherBot` (because feminism?). Oh, and when you're done naming your catbot, you will be greeted with the opportunity help us track our task completion rate. Neat, huh?
 
 *We will host `CatFather` for this session only.*
 
 #### 1.2 Acquire Telegram HTTP API Token
 
-Once we've got our Cat Bot name settled, the next step is to acquire a token from Telegram. To do this, we need to let BotFather know that we want to create a bot. Open Telegram and search for *BotFather* in the contacts search field. Ask it to register a new bot for you by sending the command `/newbot` after which it'll ask you for your bot's name and username.
+Once we've got our catbot name settled, the next step is to acquire a token from Telegram. To do this, we need to let BotFather know that we want to create a bot. Open Telegram and search for *BotFather* in the contacts search field. Ask it to register a new bot for you by sending the command `/newbot` after which it'll ask you for your bot's name and username.
 
 ![task 1.2 screenshot](screenshots/task_1_2.png?raw=true)
 
-Take note of our new bot's token to access Telegram's HTTP API as we'll need it in the code we're about to write so we can tell Telegram the behavior of our cat bot.
+Take note of our new bot's token to access Telegram's HTTP API as we'll need it in the code we're about to write so we can tell Telegram the behavior of our catbot.
 
 The token should look something like this:
 
@@ -129,7 +129,7 @@ The token should look something like this:
 
 ![task 1.3 screenshot a](screenshots/task_1_3_a.png?raw=true)
 
-Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our Cat Bot. To start off, open `catbot/catbot.py` on your text editor and paste the following snippet to where the indicated `TODO` is at (subsequent pasting of snippets will follow the same way):
+Now that we got everything we need to start developing our bot, let's start programming to define the behavioral aspects of our catbot. To start off, open `catbot/catbot.py` on your text editor and paste the following snippet to where the indicated `TODO` is at (subsequent pasting of snippets will follow the same way):
 
 ```python
 # TODO: 1.3.1 Create Hello World
@@ -175,7 +175,7 @@ When processing a message, few pieces of information are presented which we will
 
 As you may have noticed, commands start with `/` and may contain latin letters, numbers and underscores. We can suggest to the user what commands our bot understands by providing this information to BotFather. Doing so enables command suggestions where typing a `/` shows the user a list of available commands (more on this later).
 
-For this section, we'll program our cat bot such that it would be able to recognize and behave *differently* provided the following commands:
+For this section, we'll program our catbot such that it would be able to recognize and behave *differently* provided the following commands:
 
 | Command | Description |
 | --- | --- |
@@ -184,6 +184,7 @@ For this section, we'll program our cat bot such that it would be able to recogn
 | `/feed` | This command returns the response of the cat after feeding it. |
 | `/clean` | This command returns the response of the cat after bathing it. |
 | `/kitty` | This command murders your current cat if it's still alive and spawns you a new kitten. |
+| `/meow` | This command initiates an interactive conversation with the cat. |
 
 For this tutorial, we will be using a *very sophisticated* cat simulator class which has already been coded for us. You're free to explore the codes inside `catbot/cat.py` for personal learning, but it would be beyond the scope of this workshop. For now, use the information below as reference of the commands made available to us to use when interfacing with an instance of the Cat class.
 
@@ -211,8 +212,8 @@ Let's update our code by adding routing logic which would direct the program flo
 
 if (msg_text.startswith('/')):
 
-    # parse the command excluding the '/' and other arguments
-    command = msg_text[1:].lower().split()[0]
+    # parse the command excluding the '/'
+    command = msg_text[1:].lower()
 
     # prepare the correct response based on the given command
     if (command == 'ask'):
@@ -226,7 +227,6 @@ if (msg_text.startswith('/')):
     elif (command == 'clean'):
         response = cat_bot.clean()
     elif (command == 'kitty'):
-
         # TODO: 2.2.1 Confirm User Action Using Keyboard #####################
 
         # kill cat if still alive
@@ -237,11 +237,15 @@ if (msg_text.startswith('/')):
         # respawn cat
         cat_bot = Cat(bot_name)
         bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
+    # TODO: 4.2.3 Handle 'meow' Command ######################################
+    elif (command == 'meow'):
+        response = 'Purrr~'
 
     # suggest the user to respawn the cat using /kitty
     if not (cat_bot.is_alive):
         response += ' You can respawn your cat using the command /kitty.'
 else:
+    # TODO: 4.2.4 Handle Conversation States #################################
 
     # talk to the cat if no command was matched
     response = cat_bot.chat()
@@ -253,7 +257,7 @@ Notice that we can actually send multiple messages to the user within the contex
 
 #### 2.2 Keyboards
 
-Besides receiving, parsing and sending message back and forth, Telegram Bots allow richer interactions with the user using keyboards. To prevent our user from *accidentally* `/kitty`-ing our live cat, we can prompt the user again to confirm this action. To do this, let's add an **Inline Keyboard** which we could use to prompt the user to confirm his/her action.
+Besides receiving, parsing and sending message back and forth, Telegram Bots allow richer interactions with the user using keyboards. To prevent our user from *accidentally* `/kitty`-ing our live cat, we can prompt the user again to confirm this action. To do this, let's add an **Inline Keyboard** which we could use to prompt the user to confirm his/her action. There's another type of keyboard which we'll be using in the later part of this tutorial.
 
 ![task 2.2 screenshot a](screenshots/task_2_2_a.png?raw=true)
 
@@ -273,7 +277,9 @@ if (cat_bot.is_alive):
     # send response with keyboard
     response += ' Warning: ' + cat_bot.name + ' is still alive. Issuing this command will kill the cat (brutally) and reset all progress. Please confirm your action.'
     bot.sendMessage(chat_id, response, reply_markup = confirm_keyboard)
-    return # prematurely terminate function call to await user response
+
+    # terminate prematurely to avoid sending message twice
+    return
 
 else:
 
@@ -362,7 +368,7 @@ else:
 
 Sometimes the information we need may not be easily accessible via an API. For cases like this, we need to use `BeautifulSoup4` to parse an HTML page, traverse to the DOM element as specified by a selector, and then extract the attribute or text which is the exact data that we need.
 
-One way we could improve our cat bot is to send a random cat image every time the `/status` command is invoked. We could, of course, just manually save some cat pictures to a local folder somewhere, but that wouldn't really give us rich *dynamic* content because realistically, one can only have so much cat pictures in one computer.
+One way we could improve our catbot is to send a random cat image every time the `/status` command is invoked. We could, of course, just manually save some cat pictures to a local folder somewhere, but that wouldn't really give us rich *dynamic* content because realistically, one can only have so much cat pictures in one computer.
 
 ![task 3.2 screenshot a](screenshots/task_3_2_a.png?raw=true)
 
@@ -414,14 +420,14 @@ Good on you for making it this far! We're almost done but just a quick heads up:
 
 #### 4.1 Bot Delegation
 
-Normally, a bot is made to be used by more than one user. However, as it stands, our cat bot spawns only a single instance of itself. That means Captain Rainbow Bellyrubs collectively treats everybody it talks to as the same damn person! The problem may not be obvious at first but you wouldn't want your users' messages to get mixed up, would you? No, that's not very *classy* (premature pun). This is why we have to create separate instances for each user.
+Normally, a bot is made to be used by more than one user. However, as it stands, our catbot spawns only a single instance of itself. That means Captain Rainbow Bellyrubs collectively treats everybody it talks to as the same damn person! The problem may not be obvious at first but you wouldn't want your users' messages to get mixed up, would you? No, that's not very *classy* (premature pun). This is why we have to create separate instances for each user.
 
 To do this, we need to import a few modules that would help our catbot spawn multiple instances of itself. You don't really need to know what each import does but just know that `DelegatorBot` is the one that helps us keep separate conversations.
 
 ```python
 # TODO: 4.1.1 Import DelegatorBot
 
-import DelegatorBot
+from telepot import DelegatorBot
 from telepot.delegate import pave_event_space, per_chat_id, create_open
 ```
 
@@ -434,10 +440,9 @@ class CatBot(telepot.helper.ChatHandler):
 
     def __init__(self, *args, **kwargs):
         super(CatBot, self).__init__(*args, **kwargs)
-        self.state = 0
-        self.language = ''
-        self.feel = 0
-        self.ans = 0
+        self.state = MEOW_CHOOSE_LANG
+        self.language = None
+        self.sentiment = 0
 ```
 
 Now that all the functions we've written are members of `CatBot`, we need to insert an additional parameter `self` to each of these functions. This is an *Object-Oriented Programming* approach where we create an instance of this `CatBot` *object* for each user that converses with our bot. Each of these *objects* have the same starting attributes, and are independent of one another.
@@ -445,8 +450,6 @@ Now that all the functions we've written are members of `CatBot`, we need to ins
 Go ahead and add the special parameter `self` as shown below. Note that this new parameter should precede all other parameters in the function signature should it already have others written.
 
 ```python
-# TODO: 4.1.2 Wrap CatBot Class
-
 def get_random_cat_fact(self):
   ...
 
@@ -480,224 +483,208 @@ That's it! Give yourself a pat on the back you clever cat you.
 
 Often, people are looking for more than just a Q&A catbot. They are looking for a catbot  who will respond based on your responses to their responses (and so forth). A catbot with whom they might share a genuine conversation.
 
-Okay, maybe it's not entirely genuine, but it's pretty close. We will use the idea of *saved states* to build a catbot who will actually listen and care.
+Okay, maybe it's not entirely genuine, but it's pretty close. We will use the idea of *state machines* to build a catbot who will actually listen and care.
 *(Warning: catbot may not listen or care)*
 
 The concept is pretty simple:
-Let `State 0` be the so called "rest state". When you initiate a specific interaction with the catbot, it will move on to the next state `State 10`.
+Let `MEOW_CHOOSE_LANG` be the so called "rest state". When you initiate a specific interaction with the catbot, it will move on to another state `MEOW_CONFIRM_LANG`.
 
-At `State 10`, the catbot can do a specific set of tasks. Based on user input, the catbot can then move on to other states, where it can perform other sets of tasks specific to that given state.
+At `MEOW_CONFIRM_LANG`, the catbot can do other specific set of tasks. Based on user input, the catbot can then move on to other states, where it can perform other sets of tasks specific to that given state.
 
-Whew, I hope I hadn't bored you off yet. Let's do a bit of coding, shall we? First, let's initialise the state with a new command `/speak`. Insert it just after the condition for the `/kitty` command.
+To draw an image, all traffic lights follow a similar concept. In this example, let's define our rest state as `RED`. Then after a few seconds (the condition to be met), the machine transits into the next state which is `AMBER` and then finally `GREEN`. And then right after it reaches the final state, it will have to wait for a few seconds again before it *resets* itself back to `RED`.
+
+In essence, the states that we define here are just 'stages' that are ordinal in nature (literally just integers) and because they are sequential, we can easily check if we've already passed a certain state by comparing the states as if they were just numbers to begin with.
+
+Whew, I hope I hadn't bored you off yet. Let's do a bit of coding, shall we? First, let's define our states just before `CatBot` class declaration. The exact numeric values of the constants below do not really impose any significance, but keep in mind that they have to be in a non-arbitrary sequence.
 
 ```python
-             # kill cat function 'kitty' (why would you)
-             elif (command == 'kitty'):
-                 # blah blah blah kill this cat
+# TODO: 4.2.1 Set Conversation States
 
-             # TODO: insert 'speak' condition
-             # begin interaction with saved states with 'speak' command
-             elif (command == 'speak' and self.state == 0):
-                 self.state = 10
-
-                 # prepares a custom keyboard
-                 markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-                     [KeyboardButton(text='English')], [KeyboardButton(text='Spanish')],
-                     [KeyboardButton(text='German')], [KeyboardButton(text='Nevermind')]
-                 ])
-                 bot.sendMessage(chat_id, 'Meow meow mrow hisss:\n1. English\
-                 \n2. Spanish\n3. German', reply_markup=markup)
+MEOW_CHOOSE_LANG = 0
+MEOW_CONFIRM_LANG = 1
+MEOW_LEAD_TOPIC = 2
+MEOW_REACT_SENTIMENT = 3
 ```
 
-As you can see, if a user sends a `/speak` command at `State 0`, `State 10` will be initialised, and a custom keyboard is generated to help the user further the conversation, in English, Spanish, or German! Now that is one multilingual cat!
-
-Now, let's alter more code such that we can insert additional states. Replace this segment here:
+The following steps will deal with the actual implementation of the dialog interaction between the user and our catbot. As we can't possibly handle all use case scenarios, we'd need to use a keyboard to restrict the inputs the user can send our catbot. Import the other type of custom keyboard `ReplyKeyboardMarkup`, it's button class `KeyboardButton` and the `dialog` dictionary from `conversation.py` as follows.
 
 ```python
-else:
+# TODO: 4.2.2 Import KeyboardButton, ReplyKeyboardMarkup and Conversation Dialog
 
-    # talk to the cat if no command was matched
+from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
+from conversation import dialog
+```
+
+Now that we have defined our states and that our dialog is ready, replace the current handler of `/meow` with the following snippet just after the clause for the `/kitty` command.
+
+```python
+# TODO: 4.2.3 Handle 'meow' Command
+
+elif (command == 'meow' and self.state == MEOW_CHOOSE_LANG):
+
+    # get available languages
+    languages = dialog.keys()
+
+    # prepare custom keyboard
+    choose_lang_keyboard = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
+        [KeyboardButton(text=language)] for language in languages
+    ] + [[KeyboardButton(text='Nevermind')]])
+
+    response = 'Meow meow mrowww hisss'
+    bot.sendMessage(chat_id, response, reply_markup=choose_lang_keyboard)
+
+    # move to next state
+    self.state = MEOW_CONFIRM_LANG
+
+    # terminate prematurely to avoid sending message twice
+    return
+```
+
+![task 4.2 screenshot a](screenshots/task_4_2_a.png?raw=true)
+
+Notice that `ReplyKeyboardMarkup`, unlike it's cousin `InlineKeyboardMarkup`, does not issue a callback query on keyboard button *press*. This means that data on click will be sent to our bot though as if the user typed and sent that exact message.
+
+Also, as you can see, if a user sends a `/meow` command at state `MEOW_CHOOSE_LANG`, the bot will transit into `MEOW_CONFIRM_LANG`, and a custom keyboard is generated to help the user further the conversation, in English, Spanish, or German! Now that is one multilingual cat!
+
+Now, let's alter more code such that we can insert additional states. Replace the clause in `TODO 4.2.4` with this segment here:
+
+```python
+# TODO: 4.2.4 Handle Conversation States
+
+# separates responses into before and after 'speak' has been called
+if (self.state > MEOW_CHOOSE_LANG):
+
+    # dialog variable placeholders
+    dialog_keyboard = None
+    dialog_response = ''
+
+    if (self.state == MEOW_CONFIRM_LANG):
+        # TODO: 4.2.5 Handle State MEOW_CONFIRM_LANG #####################
+        pass
+
+    elif (self.state == MEOW_LEAD_TOPIC):
+        # TODO: 4.2.6 Handle State MEOW_LEAD_TOPIC #######################
+        pass
+
+    elif (self.state == MEOW_REACT_SENTIMENT):
+        # TODO: 4.2.7 Handle State MEOW_REACT_SENTIMENT ##################
+        pass
+
+    bot.sendMessage(chat_id, dialog_response, reply_markup=dialog_keyboard)
+    return
+
+else:
+    # talk to the cat if no command was matched and 'meow' not initialized
     response = cat_bot.chat()
 ```
-With the following:
+Now, for state `MEOW_CONFIRM_LANG`, we'll make catbot give a warm greeting based on the language the user chose in the previous state `MEOW_CHOOSE_LANG`. We'll use a **ReplyKeyboardMarkup** again to let the user continue or end the conversation.
 
 ```python
+# TODO: 4.2.5 Handle State MEOW_CONFIRM_LANG
+
+if (command != "Nevermind"):
+
+    # update context language for later re-use
+    self.language = command
+
+    # load language dialog
+    language_dialog = dialog[self.language]
+
+    # prepare greeting and next keyboard
+    dialog_keyboard = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
+        [KeyboardButton(text=language_dialog['yes'])], [KeyboardButton(text=language_dialog['no'])]
+    ])
+    dialog_response = language_dialog['greeting']  
+
+    # move to next state
+    self.state = MEOW_LEAD_TOPIC
+
 else:
-    # TODO: insert interactions with various states (0 to 30)
 
-    # separates responses into before and after 'speak' has been called
-    if (self.state > 0):
-        command = msg_text.lower()
-
-        # TODO: insert code for state 10
-
-
-        # TODO: add in code for state 20
-
-
-        # TODO: add in state 30
-
-
-    else:
-        # talk to the cat if no command was matched
-        # and 'speak' not initialised
-        response = cat_bot.chat()
+    # reset state when user cancels
+    self.state = MEOW_CHOOSE_LANG
+    dialog_response = 'Perhaps it\'s best to not think about it, eh?'
 ```
-Now, for `State 10`, we'll make catbot give a warm greeting based on the language the user chose in the previous state. The custom keyboard gives the options to continue or end the "conversation".
+
+Now, if the user chooses to go along with the "conversation", our state machine will eventually transit into `MEOW_LEAD_TOPIC`. This is where a big chunk of `conversation.py` with all its lists of text comes in. I'm sorry, but this is basically how you fill the vocabulary of a chat bot. It's the ugly truth no one wants to hear.
+
+Catbot will ask a random question in the form of a random leading clause + random topic, with a custom keyboard of the available answers. Remember to choose wisely! For there is actually a correct answer to each question.
 
 ```python
-# TODO: insert code for state 10
+# TODO: 4.2.6 Handle State MEOW_LEAD_TOPIC
 
-# first state after initialisation, assign language based on
-# user choice
-if (self.state == 10):
-   if (command != "nevermind"):
-       if (command == "english"):
-           self.language = 'eng'
-           self.state = 20
-           markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-               [KeyboardButton(text='I am indeed')], [KeyboardButton(text='Nope')]
-           ])
-           resp = "Well met! Ah, a fellow purveyor of the Anglo-Saxon tongue, I see."
-       elif (command == "spanish"):
-           self.language = 'spa'
-           self.state = 20
-           markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-               [KeyboardButton(text='Si senor')], [KeyboardButton(text='No se')]
-           ])
-           resp = "Hola mi amigo! Parece que hablas espanol. Te gustaria hablar conmigo?"
+# load language dialog
+language_dialog = dialog[self.language]
 
-       elif (command == "german"):
-           self.language = 'ger'
-           self.state = 20
-           markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-               [KeyboardButton(text='Ja')], [KeyboardButton(text='Nein')]
-           ])
-           resp = "Heute Deutschland, morgen die ganze welt! Warte, ich scherze nur! Komm zuruck!"
-       bot.sendMessage(chat_id, resp, reply_markup=markup)
-   else:
-       self.state = 0
-       resp = "*perhaps it's best to not think about it, eh?"
-       bot.sendMessage(chat_id, resp)
+# get random sentiment
+self.sentiment = random.randrange(2)
 
+if (command == language_dialog['yes']):
+
+    # prepare response and next keyboard
+    dialog_keyboard = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
+        [KeyboardButton(text=sentiment)] for sentiment in language_dialog['sentiments'].values()
+    ])
+
+    # get a random leading clause
+    dialog_response = random.choice(language_dialog['responses']['leading'])
+
+    # get a random topic
+    dialog_response += random.choice(sum(language_dialog['topics'].values(), [])) + '?'
+
+    # move to next state
+    self.state = MEOW_REACT_SENTIMENT
+
+else:
+
+    # reset state when user cancels
+    self.state = MEOW_CHOOSE_LANG
+    dialog_response = 'That\'s a shame.'
 ```
 
-Now, if the user chooses to go along with the "conversation", `State 20` will be initialised. This is where the top portion with all the lists of texts comes in. I'm sorry, but this is basically how you fill the vocabulary of a chat bot. It's the ugly truth no one wants to hear.
-
-Catbot will ask a random question from the list, with a custom keyboard of the available answers. Choose wisely! For there is actually a correct answer to each question.
+Next, assuming the user hasn't quit the conversation yet, our machine moves into the next state `MEOW_REACT_SENTIMENT`. Here, catbot responds based on the user's previous answer. For example, catbot asked about "Hitler" and the answer is "I love it!", then catbot will be angry, and respond with a random insult. *This goes for real life - don't go around telling people you love Hitler. It won't end well for you I tell ya.*
 
 ```python
-# TODO: add in code for state 20
+# TODO: 4.2.7 Handle State MEOW_REACT_SENTIMENT
 
-# second state after initialisation, takes in user input and asks
-# a question accordingly
-elif (self.state == 20):
-    resp = ''
-    self.feel = random.randrange(3)
-    if (self.language == 'eng'):
-        if (command == 'i am indeed'):
-            self.state = 30
-            markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-                [KeyboardButton(text='I love it')], [KeyboardButton(text='Meh')],
-                [KeyboardButton(text='I hate it')], [KeyboardButton(text='I want out')]
-            ])
-            resp += random.choice(eng_prompt)
-            resp += random.choice(englist[self.feel])
-            resp += '?'
-            bot.sendMessage(chat_id, resp, reply_markup=markup)
-        else:
-            self.state = 0
-            resp = "That's a shame."
-            bot.sendMessage(chat_id, resp)
-    elif (self.language == 'ger'):
-        if (command == 'ja'):
-            self.state = 30
-            markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-                [KeyboardButton(text='Ich liebe es')], [KeyboardButton(text='Meh')],
-                [KeyboardButton(text='Ich hasse es')], [KeyboardButton(text='Ich will gehen')]
-            ])
-            resp += random.choice(ger_prompt)
-            resp += random.choice(gerlist[self.feel])
-            resp += '?'
-            bot.sendMessage(chat_id, resp, reply_markup=markup)
-        else:
-            self.state = 0
-            resp = "Das ist zu schade."
-            bot.sendMessage(chat_id, resp)
-    elif (self.language == 'spa'):
-        if (command == 'si senor'):
-            self.state = 30
-            markup = ReplyKeyboardMarkup(one_time_keyboard=True,keyboard=[
-                [KeyboardButton(text='Me gusta')], [KeyboardButton(text='Meh')],
-                [KeyboardButton(text='No me gusta')], [KeyboardButton(text='Quiero irme')]
-            ])
-            resp += random.choice(spa_prompt)
-            resp += random.choice(spalist[self.feel])
-            resp += '?'
-            bot.sendMessage(chat_id, resp, reply_markup=markup)
-        else:
-            self.state = 0
-            resp = "Eso es muy malo."
-            bot.sendMessage(chat_id, resp)
+# load language dialog
+language_dialog = dialog[self.language]
 
+if (command != language_dialog['sentiments']['cancel']):
+
+    # get numeric value of user answer
+    answer = [language_dialog['sentiments']['good'],
+    language_dialog['sentiments']['meh'],
+    language_dialog['sentiments']['bad']].index(command)
+
+    # prepare random response accordingly if user's answer matches bot's sentiment
+    responses = language_dialog['responses']['good' if self.sentiment == answer else 'bad']
+    dialog_response = random.choice(responses)
+
+else:
+
+    # prepare different response when user cancels
+    dialog_response = "Was it all a dream? You could have sworn that cat just spoke to you..."
+
+# reset state either way
+self.state = MEOW_CHOOSE_LANG
 ```
 
-Next, assuming the user hasn't quit the conversation yet, `State 30` is initialised. Here, catbot responds based on the user's previous answer. For example, catbot asked about `Hitler` and the answer is `I love it!`, then catbot will be angry, and respond with a random insult. *This goes for real life - don't go around telling people you love Hitler. It won't end well for you*
+Thus ends this "conversation" and the state reverts back to `MEOW_CHOOSE_LANG`. Of course, you can always insert more states to extend the feeling of actually talking to someone, but we're going to leave that part to you.
 
-```python
-# TODO: add in state 30
-
-# third state after initialisation, takes in user input, remembers
-# the previous question, and responds in the context of the question in the second state
-elif (self.state == 30):
-    resp = ''
-    if (command == 'i love it' or command == 'ich liebe es' or command == 'me gusta'):
-        self.ans = 0
-    elif (command == 'meh'):
-        self.ans = 1
-    elif (command == 'i hate it' or command == 'ich hasse es' or command == 'no me gusta'):
-        self.ans = 2
-    else:
-        self.ans = 3
-
-    if (self.ans == 3):
-        self.state = 0
-        resp = "*Was it all a dream? You could have sworn that cat just spoke to you..."
-    else:
-        if self.language == 'eng':
-            if (self.feel == self.ans):
-                resp = random.choice(eng_goodresp)
-            else:
-                resp = random.choice(eng_badresp)
-        elif self.language == 'ger':
-            if (self.feel == self.ans):
-                resp = random.choice(ger_goodresp)
-            else:
-                resp = random.choice(ger_badresp)
-        elif self.language == 'spa':
-            if (self.feel == self.ans):
-                resp = random.choice(spa_goodresp)
-            else:
-                resp = random.choice(spa_badresp)
-        self.state = 0
-        bot.sendMessage(chat_id, resp)
-```
-
-Thus ends this "conversation". The state reverts back to `State 0`. Of course, you can always insert more states to extend the feeling of actually talking to someone.
-
-![task 1.3 screenshot b](screenshots/task_5_2_a.png?raw=true)![task 1.3 screenshot b](screenshots/task_5_2_b.png?raw=true)
+![task 4.2 screenshot b](screenshots/task_4_2_b.png?raw=true)
 
 This is it for interacting with saved states. The full, working code may be found under `examples/multi_catbot.py`.
 
 ## Task 5 - Deployment
 
-The final step is to free our cat bot into the wild, that is, to get it deployed on a server. Of course there's always the option to keep your laptop or device running, but why do that when you can get it up and running on a remote server *for free*?
+The final step is to free our catbot into the wild, that is, to get it deployed on a server. Of course there's always the option to keep your laptop or device running, but why do that when you can get it up and running on a remote server *for free*?
 
 To do this, login to your Heroku dashboard ([sign up here](https://signup.heroku.com) if you still don't have one) and create a new app like this:
 
 ![task 5 screenshot a](screenshots/task_5_a.png?raw=true)
 
-There's no specific naming convention for catbot deployment applications, but for this instance, let's name our app after our cat like this: `captain-rainbow-bellyrubs-bot` (use your cat's own name you dummy). Note that by default, free accounts only get access to US and Europe servers but it shouldn't be a problem for us whichever region we choose.
+There's no specific naming convention for catbot deployment applications, but for this instance, let's name our app after our catbot like this: `captain-rainbow-bellyrubs-bot` (use your catbot's own name you dummy). Note that by default, free accounts only get access to US and Europe servers but it shouldn't be a problem for us whichever region we choose.
 
 Once that's done, head over to *Deployment* in the *Deploy* tab of your new app and link your Dropbox  account ([sign up here](https://db.tt/v1tjjEafrg) if you still don't have one).
 

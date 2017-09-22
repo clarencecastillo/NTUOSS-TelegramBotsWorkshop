@@ -18,8 +18,12 @@ from cat import Cat
 
 # TODO: 4.1.1 Import DelegatorBot ####################################################
 
+# TODO: 4.2.2 Import KeyboardButton, ReplyKeyboardMarkup and Conversation Dialog #####
+
 # TODO: 1.3.2 Replace Token ##########################################################
 TOKEN = ''
+
+# TODO: 4.2.1 Set Conversation States ################################################
 
 # TODO: 4.1.2 Wrap CatBot Class ######################################################
 
@@ -36,7 +40,6 @@ def on_chat_message(msg):
 def on_callback_query(msg):
     global cat_bot
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-    print('Callback Query:', query_id, from_id, query_data)
 
     # TODO: 2.2.3 Handle Callback Query ##############################################
 
@@ -45,7 +48,9 @@ def on_callback_query(msg):
 
 # bootstrap the bot and spawn the cat
 # TODO: 4.1.3 Implement DelegatorBot #################################################
-MessageLoop(bot).run_as_thread()
+bot = telepot.Bot(TOKEN)
+MessageLoop(bot, {'chat': on_chat_message,
+                  'callback_query': on_callback_query}).run_as_thread()
 
 bot_name = bot.getMe()['first_name']
 cat_bot = Cat(bot_name)
