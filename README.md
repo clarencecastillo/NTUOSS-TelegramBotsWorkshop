@@ -588,10 +588,10 @@ Now, for state `MEOW_CONFIRM_LANG`, we'll make catbot give a warm greeting based
 ```python
 # TODO: 4.2.5 Handle State MEOW_CONFIRM_LANG
 
-if (command != "Nevermind"):
+if (msg_text != "Nevermind"):
 
     # update context language for later re-use
-    self.language = command
+    self.language = msg_text
 
     # load language dialog
     language_dialog = dialog[self.language]
@@ -625,7 +625,7 @@ language_dialog = dialog[self.language]
 # get random sentiment
 self.sentiment = random.randrange(2)
 
-if (command == language_dialog['yes']):
+if (msg_text == language_dialog['yes']):
 
     # prepare response and next keyboard
     dialog_keyboard = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
@@ -656,12 +656,12 @@ Next, assuming the user hasn't quit the conversation yet, our machine moves into
 # load language dialog
 language_dialog = dialog[self.language]
 
-if (command != language_dialog['sentiments']['cancel']):
+if (msg_text != language_dialog['sentiments']['cancel']):
 
     # get numeric value of user answer
     answer = [language_dialog['sentiments']['good'],
     language_dialog['sentiments']['meh'],
-    language_dialog['sentiments']['bad']].index(command)
+    language_dialog['sentiments']['bad']].index(msg_text)
 
     # prepare random response accordingly if user's answer matches bot's sentiment
     responses = language_dialog['responses']['good' if self.sentiment == answer else 'bad']
