@@ -35,7 +35,7 @@ MEOW_REACT_SENTIMENT = 3
 class CatBot(telepot.helper.ChatHandler):
 
     def __init__(self, *args, **kwargs):
-        super(CatBot, self).__init__(*args, **kwargs)
+        super(CatBot, self).__init__(include_callback_query=True, *args, **kwargs)
         self.state = MEOW_CHOOSE_LANG
         self.language = None
         self.sentiment = 0
@@ -116,7 +116,7 @@ class CatBot(telepot.helper.ChatHandler):
                     else:
 
                         # respawn cat
-                        cat_bot = Cat(bot_name)
+                        cat_bot.kill()
                         bot.sendMessage(chat_id, '*respawns ' + cat_bot.name + '*')
 
                 elif (command == 'meow' and self.state == MEOW_CHOOSE_LANG):
@@ -248,13 +248,12 @@ class CatBot(telepot.helper.ChatHandler):
 
         # kill cat (brutally) on confirm
         if (query_data == 'kitty-confirm'):
-            cat_bot = Cat(bot_name)
             bot.sendMessage(from_id, 'Meow!!!')
             bot.sendMessage(from_id, '*scratches your face*')
             bot.sendMessage(from_id, cat_bot.name + ' was killed.')
 
             #respawn cat
-            cat_bot = Cat(bot_name)
+            cat_bot.kill()
             bot.sendMessage(from_id, '*respawns ' + cat_bot.name + '*')
         else:
             bot.sendMessage(from_id, text='Meowww~~~')

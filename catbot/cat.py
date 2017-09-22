@@ -85,11 +85,11 @@ class Cat(object):
             return "..."
 
     def kill(self):
-        # try:
-        #     requests.get(DEAD_CAT_COUNTER_URL + 'kitty')
-        # except:
-        #     pass
-        # self.__init__(self.name)
+        try:
+            requests.get(DEAD_CAT_COUNTER_URL + 'kitty')
+        except:
+            pass
+        self.__init__(self.name)
         return
 
 # ------------------------ DO NOT TOUCH THIS FILE ------------------------ #
