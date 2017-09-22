@@ -182,7 +182,7 @@ For this section, we'll program our catbot such that it would be able to recogni
 | `/kitty` | This command murders your current cat if it's still alive and spawns you a new kitten. |
 | `/meow` | This command initiates an interactive conversation with the cat. |
 
-Before we start, let's tell BotFather first of the commands we'll be writing. To do this, start by searching for `BotFather` and then type `/mybots` to get a list of your registered bots. Click the bot you just created and then click the `Edit Commands` button which should prompt you to type your bot's commands. To save us time, just paste the following snippet:
+Before we start, let's tell BotFather first of the commands we'll be writing. To do this, start by searching for `BotFather` and then type `/mybots` to get a list of your registered bots. Click the bot you just created and then click `Edit Bot` followed by `Edit Commands` button which should prompt you to type your bot's commands. To save us time, just paste the following snippet:
 
 ```
 ask - Returns a random fact about cats
@@ -212,7 +212,7 @@ The idea is to take care of a simulated cat using our bot. The cat's behavior an
 
 ![task 2.1 screenshot a](screenshots/task_2_1_a.png?raw=true)
 
-Let's update our code by adding routing logic which would direct the program flow according to the user's command.
+Let's update our code by adding routing logic which would direct the program flow according to the user's command. Replace everything below this `TODO 2.1.1` inside the same clause with the following:
 
 ```python
 # TODO: 2.1.1 Implement Command Handling
@@ -314,7 +314,6 @@ bot.editMessageReplyMarkup(inline_message_id, reply_markup=None)
 
 # kill cat (brutally) on confirm
 if (query_data == 'kitty-confirm'):
-    cat_bot = Cat(bot_name)
     bot.sendMessage(from_id, 'Meow!!!')
     bot.sendMessage(from_id, '*scratches your face*')
     bot.sendMessage(from_id, cat_bot.name + ' was killed.')
