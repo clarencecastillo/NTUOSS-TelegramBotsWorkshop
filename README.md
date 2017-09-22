@@ -447,7 +447,7 @@ This next part is a little tricky - we are gonna wrap all we've done into someth
 class CatBot(telepot.helper.ChatHandler):
 
     def __init__(self, *args, **kwargs):
-        super(CatBot, self).__init__(*args, **kwargs)
+        super(CatBot, self).__init__(include_callback_query=True, *args, **kwargs)
         self.state = MEOW_CHOOSE_LANG
         self.language = None
         self.sentiment = 0
@@ -480,7 +480,7 @@ Now, just replace our previous bootstrap code with the new one below and let `De
 
 bot = DelegatorBot(TOKEN, [
     pave_event_space()
-    (per_chat_id(), create_open, CatBot, timeout=20)
+    (per_chat_id(), create_open, CatBot, timeout=100)
 ])
 MessageLoop(bot).run_as_thread()
 ```
