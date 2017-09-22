@@ -186,6 +186,17 @@ For this section, we'll program our catbot such that it would be able to recogni
 | `/kitty` | This command murders your current cat if it's still alive and spawns you a new kitten. |
 | `/meow` | This command initiates an interactive conversation with the cat. |
 
+Before we start, let's tell BotFather first of the commands we'll be writing. To do this, start by searching for `BotFather` and then type `/mybots` to get a list of your registered bots. Click the bot you just created and then click the `Edit Commands` button which should prompt you to type your bot's commands. To save us time, just paste the following snippet:
+
+```
+ask - Returns a random fact about cats
+status - Returns the status of the cat together with a random picture of it
+feed - Returns the response of the cat after feeding it
+clean - Returns the response of  the cat after bathing it
+kitty - Murders your current cat if it's still alive and spawns you a new kitten
+meow - initiates an interactive conversation with the cat
+```
+
 For this tutorial, we will be using a *very sophisticated* cat simulator class which has already been coded for us. You're free to explore the codes inside `catbot/cat.py` for personal learning, but it would be beyond the scope of this workshop. For now, use the information below as reference of the commands made available to us to use when interfacing with an instance of the Cat class.
 
 -   Attributes:
