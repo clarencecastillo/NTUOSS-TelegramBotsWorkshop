@@ -159,10 +159,6 @@ TOKEN = '2351749591:VskzWEJdWj_rlCx23Hyu5mIJdWjTVskzdEx'
 
 Let's bring our bot to life by running it. If you didn't get any errors this far, you should be able to test your bot by talking to it via Telegram Desktop. Enter your bot's username in the contacts search field and press `start` to begin the conversation. Remember that bots cannot initiate conversations with users so you have to send it a message first.
 
-Assuming you did not make any changes to the `response` variable, the bot should respond with `Meow! Hi <username>. Hello world!` and your message should be printed on the terminal.
-
-![task 1.3 screenshot b](screenshots/task_1_3_b.png?raw=true)
-
 ## Task 2 - Handling Message Events
 
 #### 2.1 Commands
