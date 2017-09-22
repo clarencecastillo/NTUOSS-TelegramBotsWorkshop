@@ -17,7 +17,7 @@ CLEAN_AMOUNT = 50
 
 CYCLES_PER_DAY = 4
 
-DEAD_CAT_COUNTER_URL = 'http://7156e54e.ngrok.io/'
+DEAD_CAT_COUNTER_URL = 'http://3e4228e9.ngrok.io'
 
 class Cat(object):
 

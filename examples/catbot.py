@@ -25,7 +25,7 @@ from conversation import dialog
 
 from conversation import dialog
 
-TOKEN = '391939158:AAG1M4c2RJOKjYwgtq9FkomA_uwC3v-ErCs'
+TOKEN = ''
 
 MEOW_CHOOSE_LANG = 0
 MEOW_CONFIRM_LANG = 1
