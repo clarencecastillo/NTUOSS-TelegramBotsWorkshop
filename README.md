@@ -19,14 +19,6 @@ Please raise your hand any time during the workshop or email your questions to [
 For errors, typos or suggestions, please do not hesitate to [post an issue](https://github.com/clarencecastillo/NTUOSS-TelegramBotsWorkshop/issues/new). Pull requests are very welcome! Thanks!
 ___
 
-## Index
-
-Task 0 - Getting Started
-    - 0.1 Introduction
-    - 0.2 Initial Setup
-
-___
-
 ## Task 0 - Getting Started
 
 #### 0.1 Introduction
